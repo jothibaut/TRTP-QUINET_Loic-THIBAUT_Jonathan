@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
 				break;
 			case 'p':
 				port = atoi(optarg);
+				printf("%d\n",port);
 				break;
 			case 'h':
 				host = optarg;
