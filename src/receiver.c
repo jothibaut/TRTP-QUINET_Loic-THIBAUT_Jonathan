@@ -58,14 +58,12 @@ int main(int argc, char *argv[])
 
 
 	sfd = create_socket(&addr, port, NULL, -1); /* Bound */
-	printf("%d\n", sfd);
 	if (sfd > 0 && wait_for_client(sfd) < 0) { /* Connected */ //Si j'ai un socket mais qu'il y a une erreur dans wait_for_client
 		fprintf(stderr,
 				"Could not connect the socket after the first message.\n");
 		close(sfd);
 		return EXIT_FAILURE;
 	}
-
 	if (sfd < 0) {
 		fprintf(stderr, "Failed to create the socket!\n");
 		return EXIT_FAILURE;

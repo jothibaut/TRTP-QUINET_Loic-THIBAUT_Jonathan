@@ -29,6 +29,7 @@ pkt_t* pkt_new()
 {
     struct pkt* r=(struct pkt*) calloc (1 , sizeof ( pkt_t ));
     if(r==NULL){
+        fprintf(stderr, "%s\n", "Erreur : calloc");
         return NULL;
     }
     return r;
@@ -277,7 +278,7 @@ pkt_status_code pkt_set_seqnum(pkt_t *pkt, const uint8_t seqnum)
 
 pkt_status_code pkt_set_length(pkt_t *pkt, const uint16_t length)
 {
-    if(length > 512){
+    if(length > MAX_PAYLOAD_SIZE){
         return E_LENGTH;
     }
     pkt->length=length;

@@ -41,7 +41,6 @@ int create_socket(struct sockaddr_in6 *source_addr,
     }
         
     if(dest_addr != NULL){
-        fprintf(stderr, "%s\n", "pintade");
         if(connect(sfd,(struct sockaddr *) dest_addr,(socklen_t) sizeof(struct sockaddr_in6)) != 0){
             fprintf(stderr, "%s\n", "Erreur : connect socket à la dest");
             return -1;

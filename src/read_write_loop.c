@@ -16,9 +16,14 @@ void read_write_loop(int sfd){
     struct pollfd fds[2];
     int ret;
     char buf[1024];
-    int seqnum = 0;
-    size_t *bufLen;
+    int seqnum = 100;
+    size_t *bufLen = (size_t *) malloc(sizeof(size_t));
     struct pkt* thePkt = NULL;
+
+    thePkt = pkt_new();
+    if(thePkt == NULL){
+		fprintf(stderr, "%s\n", "Erreur : pkt_new");
+	}
 
     /* watch stdin for input */
     fds[0].fd = 0; //STDIN_FILENO
@@ -51,13 +56,19 @@ void read_write_loop(int sfd){
                 return;
             }
             seqnum++;
+            fprintf(stderr, "%s\n", "on a créé le paquet");
+
+            uint8_t tr = pkt_get_seqnum(thePkt);
+            fprintf(stderr, "%d\n", tr);
 
             *bufLen = 1024;
+            fprintf(stderr, "%s\n", "on a rempli bufLen");
             pkt_status_code statEncode = pkt_encode(thePkt, buf, bufLen);
             if(statEncode != 0){
                 fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet");
                 return;
             }
+            fprintf(stderr, "%s\n", "On a encodé le paquet");
 
             if(write(sfd, buf, *bufLen) == -1){
                 fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
@@ -66,27 +77,35 @@ void read_write_loop(int sfd){
         }
         
         if (fds[1].revents & POLLIN){ //SFD
-        int r = read(sfd, buf, 1024);
-        if(r == -1){
-            fprintf(stderr, "%s\n", "Echec lors de la lecture du socket");
-            return;
-        }
-        else if(r == EOF){
-            fprintf(stderr, "%s\n", "le socket a atteint EOF");
-            return;
-        }
+	        int r = read(sfd, buf, 1024);
+	        if(r == -1){
+	            fprintf(stderr, "%s\n", "Echec lors de la lecture du socket");
+	            return;
+	        }
+	        else if(r == EOF){
+	            fprintf(stderr, "%s\n", "le socket a atteint EOF");
+	            return;
+	        }
+	        fprintf(stderr, "%s\n", "on a lu le socket");
 
-        pkt_status_code statDecode = pkt_decode(buf, r, thePkt);
-        if(statDecode != 0){
-            fprintf(stderr, "%s\n", "Echec lors du decodage du paquet");
-                return;
-        }
 
-        if(fwrite(buf, sizeof(char), r, stdout) == 0){
-            fprintf(stderr, "%s\n", "Erreur lors de l ecriture sur stdout");
-            return;
+	        pkt_status_code statDecode = pkt_decode(buf, r, thePkt);
+	        if(statDecode != 0){
+	            fprintf(stderr, "%s\n", "Echec lors du decodage du paquet");
+	                return;
+	        }
+	        fprintf(stderr, "%s\n", "on a décodé le socket");
+
+	        if(fwrite(buf, sizeof(char), r, stdout) == 0){
+	            fprintf(stderr, "%s\n", "Erreur lors de l ecriture sur stdout");
+	            return;
+	        }
+	        fflush(stdout);
+	        fprintf(stderr, "%s\n", "on a écrit sur stdout");
         }
-        fflush(stdout);
-        }
-    } 
+    }
+
+    pkt_del(thePkt);
+    free(bufLen);
+
 }
