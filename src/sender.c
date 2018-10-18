@@ -8,6 +8,7 @@
 #include "read_write_loop.h"
 #include "wait_for_client.h"
 #include "packet_interface.h"
+#include "create_packet.h"
 
 
 int main(int argc, char *argv[])
@@ -15,9 +16,8 @@ int main(int argc, char *argv[])
 	int port = 12345;
 	int opt;
 	char *host = "::1"; //localhost
-	char *file;
-	int fd = 0;
-	int isFile =0;
+	//char *file;
+	//int isFile =0;
 	int sfd;
 
 	if(argc < 3){
@@ -28,12 +28,13 @@ int main(int argc, char *argv[])
 	while ((opt = getopt(argc, argv, "f:")) != -1) {
 		switch (opt) {
 			case 'f':
-				isFile = 1;
-				file = optarg;
+				//isFile = 1;
+				//file = optarg;
 				break;
 		}
 	}
 
+	/*
 	if(isFile == 1){
 		host = argv[3];
 		port = atoi(argv[4]);
@@ -41,6 +42,10 @@ int main(int argc, char *argv[])
 		host = argv[1];
 		port = atoi(argv[2]);
 	}
+	*/
+
+	host = argv[1];
+	port = atoi(argv[2]);
 
 	// Resolve the hostname
 	struct sockaddr_in6 addr;

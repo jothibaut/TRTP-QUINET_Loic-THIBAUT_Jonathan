@@ -53,7 +53,7 @@ void pkt_del(pkt_t*);
  * - La longueur du paquet et le champ TR sont valides et coherents
  *   avec le nombre d'octets recus.
  *
- * @data: L'ensemble d'octets constituant le paquet recu
+ * @data: L'ensemble d'octets constituant le paquet recu --> Pas juste le payload, tout !
  * @len: Le nombre de bytes recus
  * @pkt: Une struct pkt valide
  * @post: pkt est la representation du paquet recu

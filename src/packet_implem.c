@@ -105,8 +105,7 @@ pkt_status_code pkt_decode(const char *data, const size_t len, pkt_t *pkt)
         pkt_set_crc1(pkt, cr1);
     }
     else{
-        return 
-        CRC;
+        return E_CRC;
     }
     
     //Copie le payload dans la strcuture et check le CRC2
