@@ -16,13 +16,19 @@ void read_write_loop(int sfd){
     struct pollfd fds[2];
     int ret;
     char buf[1024];
+    char buf_ack[1024];
     int seqnum = 100;
     size_t *bufLen = (size_t *) malloc(sizeof(size_t));
-    struct pkt* thePkt = NULL;
+    struct pkt* thePkt_data = NULL;
+    thePkt_data = pkt_new();
+    if(thePkt_data == NULL){
+		fprintf(stderr, "%s\n", "Erreur : pkt_new_data");
+	}
 
-    thePkt = pkt_new();
-    if(thePkt == NULL){
-		fprintf(stderr, "%s\n", "Erreur : pkt_new");
+	struct pkt* thePkt_ack = NULL;
+	thePkt_ack = pkt_new();
+    if(thePkt_ack == NULL){
+		fprintf(stderr, "%s\n", "Erreur : pkt_new_ack");
 	}
 
     /* watch stdin for input */
@@ -50,22 +56,22 @@ void read_write_loop(int sfd){
                 return;
             }
 
-            create_packet_data(thePkt, buf, seqnum);
-            if(thePkt == NULL){
+            create_packet_data(thePkt_data, buf, seqnum);
+            if(thePkt_data == NULL){
                 fprintf(stderr, "%s\n", "Echec lors de la creation du paquet");
                 return;
             }
-            seqnum++;
+            seqnum++; //Attention provisoire !!! Nomalement connerie de modulo
             fprintf(stderr, "%s\n", "on a créé le paquet");
 
-            uint8_t tr = pkt_get_seqnum(thePkt);
+            uint8_t tr = pkt_get_seqnum(thePkt_data);
             fprintf(stderr, "%d\n", tr);
 
             *bufLen = 1024;
             fprintf(stderr, "%s\n", "on a rempli bufLen");
-            pkt_status_code statEncode = pkt_encode(thePkt, buf, bufLen);
+            pkt_status_code statEncode = pkt_encode(thePkt_data, buf, bufLen);
             if(statEncode != 0){
-                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet");
+                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data");
                 return;
             }
             fprintf(stderr, "%s\n", "On a encodé le paquet");
@@ -77,6 +83,7 @@ void read_write_loop(int sfd){
         }
         
         if (fds[1].revents & POLLIN){ //SFD
+        	*bufLen = 1024;
 	        int r = read(sfd, buf, 1024);
 	        if(r == -1){
 	            fprintf(stderr, "%s\n", "Echec lors de la lecture du socket");
@@ -89,23 +96,45 @@ void read_write_loop(int sfd){
 	        fprintf(stderr, "%s\n", "on a lu le socket");
 
 
-	        pkt_status_code statDecode = pkt_decode(buf, r, thePkt);
+	        pkt_status_code statDecode = pkt_decode(buf, r, thePkt_data);
 	        if(statDecode != 0){
-	            fprintf(stderr, "%s\n", "Echec lors du decodage du paquet");
+	        	if(statDecode == E_CRC){
+	        		//garder le packet si on est dans le receiver
+	        		//discard l'ack si on est dans le sender
+	        	}
+	            fprintf(stderr, "%s\n", "Echec lors du decodage du paquet data");
 	                return;
 	        }
 	        fprintf(stderr, "%s\n", "on a décodé le socket");
 
-	        if(fwrite(buf, sizeof(char), r, stdout) == 0){
-	            fprintf(stderr, "%s\n", "Erreur lors de l ecriture sur stdout");
-	            return;
-	        }
-	        fflush(stdout);
-	        fprintf(stderr, "%s\n", "on a écrit sur stdout");
+	        if(pkt_get_type(thePkt_data) == PTYPE_DATA){
+	        	create_packet_ack(thePkt_ack, seqnum); //Attention par le bon seqnum
+
+	        	pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
+	            if(statEncode != 0){
+	                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+	                return;
+	            }
+
+	            if(write(sfd, buf_ack, *bufLen) == -1){
+	                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+	                return;
+	            }
+
+		        if(fwrite(buf, sizeof(char), r, stdout) == 0){
+                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
+                    return;
+                }
+		        fflush(stdout);
+		        fprintf(stderr, "%s\n", "on a écrit sur stdout");
+		    }else if(pkt_get_type(thePkt_data) == PTYPE_ACK){
+		    	continue;
+		    }
         }
     }
 
-    pkt_del(thePkt);
+    pkt_del(thePkt_data);
+    pkt_del(thePkt_ack);
     free(bufLen);
 
 }
