@@ -26,6 +26,9 @@ sender: sender.o read_write_loop.o create_socket.o real_address.o wait_for_clien
 
 receiver: receiver.o read_write_loop.o create_socket.o real_address.o wait_for_client.o create_packet.o packet_implem.o -lz
 
+tests:
+	cd tests && $(MAKE)
+
 .PHONY: clean
 
 clean:

@@ -252,7 +252,7 @@ pkt_status_code pkt_set_seqnum(pkt_t *pkt, const uint8_t seqnum)
 
 pkt_status_code pkt_set_length(pkt_t *pkt, const uint16_t length)
 {
-	if(length<0 || length>512){
+	if(length>512){
 		return E_length;
 	}
     pkt->length=length;
