@@ -17,11 +17,12 @@ void read_write_loop(int sfd){
     int ret;
     char buf[1024];
     char buf_ack[1024];
+    char buf_nack[1024];
     int seqnum = 100;
     size_t *bufLen = (size_t *) malloc(sizeof(size_t));
-    struct pkt* thePkt_data = NULL;
-    thePkt_data = pkt_new();
-    if(thePkt_data == NULL){
+    struct pkt* thePkt = NULL;
+    thePkt = pkt_new();
+    if(thePkt == NULL){
 		fprintf(stderr, "%s\n", "Erreur : pkt_new_data");
 	}
 
@@ -29,6 +30,12 @@ void read_write_loop(int sfd){
 	thePkt_ack = pkt_new();
     if(thePkt_ack == NULL){
 		fprintf(stderr, "%s\n", "Erreur : pkt_new_ack");
+	}
+
+	struct pkt* thePkt_nack = NULL;
+	thePkt_nack = pkt_new();
+    if(thePkt_nack == NULL){
+		fprintf(stderr, "%s\n", "Erreur : pkt_new_nack");
 	}
 
     /* watch stdin for input */
@@ -56,20 +63,20 @@ void read_write_loop(int sfd){
                 return;
             }
 
-            create_packet_data(thePkt_data, buf, seqnum);
-            if(thePkt_data == NULL){
+            create_packet_data(thePkt, buf, seqnum);
+            if(thePkt == NULL){
                 fprintf(stderr, "%s\n", "Echec lors de la creation du paquet");
                 return;
             }
             seqnum++; //Attention provisoire !!! Nomalement connerie de modulo
             fprintf(stderr, "%s\n", "on a créé le paquet");
 
-            uint8_t tr = pkt_get_seqnum(thePkt_data);
+            uint8_t tr = pkt_get_seqnum(thePkt);
             fprintf(stderr, "%d\n", tr);
 
             *bufLen = 1024;
             fprintf(stderr, "%s\n", "on a rempli bufLen");
-            pkt_status_code statEncode = pkt_encode(thePkt_data, buf, bufLen);
+            pkt_status_code statEncode = pkt_encode(thePkt, buf, bufLen);
             if(statEncode != 0){
                 fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data");
                 return;
@@ -81,6 +88,10 @@ void read_write_loop(int sfd){
                 return;
             }
         }
+
+
+
+
         
         if (fds[1].revents & POLLIN){ //SFD
         	*bufLen = 1024;
@@ -96,45 +107,62 @@ void read_write_loop(int sfd){
 	        fprintf(stderr, "%s\n", "on a lu le socket");
 
 
-	        pkt_status_code statDecode = pkt_decode(buf, r, thePkt_data);
-	        if(statDecode != 0){
-	        	if(statDecode == E_CRC){
-	        		//garder le packet si on est dans le receiver
+	        pkt_status_code statDecode = pkt_decode(buf, r, thePkt);
+	        if(statDecode != 0){ //Erreur qlq part
+	        	if(statDecode == E_CRC){ //Le CRC n'a pas fonctionné
+	        		//discarde le paquet --> RTO le renverra
 	        		//discard l'ack si on est dans le sender
 	        	}
-	            fprintf(stderr, "%s\n", "Echec lors du decodage du paquet data");
-	                return;
-	        }
-	        fprintf(stderr, "%s\n", "on a décodé le socket");
+	        }else if(pkt_get_tr(thePkt) == 1){ //Paquet tronqué
+	        	if(pkt_get_type(thePkt) == PTYPE_ACK || pkt_get_type(thePkt) == PTYPE_NACK){ //Si TR = 1 et type autre que data, on ignore
+	        		//on ignore le paquet
+	        	}else{
+	        		create_packet_nack(thePkt_nack, seqnum);
 
-	        if(pkt_get_type(thePkt_data) == PTYPE_DATA){
-	        	create_packet_ack(thePkt_ack, seqnum); //Attention par le bon seqnum
+		        	pkt_status_code statEncode = pkt_encode(thePkt_nack, buf_nack, bufLen);
+		            if(statEncode != 0){
+		                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+		                return;
+		            }
 
-	        	pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
-	            if(statEncode != 0){
-	                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
-	                return;
-	            }
+		            if(write(sfd, buf_ack, *bufLen) == -1){
+		                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+		                return;
+		            }
+	        	}
+	        }else{ //Cas classique
+	        	if(pkt_get_type(thePkt) == PTYPE_DATA){
+		        	create_packet_ack(thePkt_ack, seqnum); //Attention pas le bon seqnum
 
-	            if(write(sfd, buf_ack, *bufLen) == -1){
-	                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
-	                return;
-	            }
+		        	pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
+		            if(statEncode != 0){
+		                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+		                return;
+		            }
 
-		        if(fwrite(buf, sizeof(char), r, stdout) == 0){
-                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
-                    return;
-                }
-		        fflush(stdout);
-		        fprintf(stderr, "%s\n", "on a écrit sur stdout");
-		    }else if(pkt_get_type(thePkt_data) == PTYPE_ACK){
-		    	continue;
-		    }
+		            if(write(sfd, buf_ack, *bufLen) == -1){
+		                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+		                return;
+		            }
+
+			        if(fwrite(buf, sizeof(char), r, stdout) == 0){
+	                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
+	                    return;
+	                }
+			        fflush(stdout);
+			    }else if(pkt_get_type(thePkt) == PTYPE_ACK){
+			    	//On slide la fenêtre et on continue à envoyer des données
+			    	continue;
+			    }else if(pkt_get_type(thePkt) == PTYPE_NACK){
+			    	//On renvoit le paquet
+			    }
+	        }  
         }
     }
 
-    pkt_del(thePkt_data);
+    pkt_del(thePkt);
     pkt_del(thePkt_ack);
+    pkt_del(thePkt_nack);
     free(bufLen);
 
 }

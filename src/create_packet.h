@@ -5,4 +5,6 @@ void create_packet_data(struct pkt *, char *, int);
 
 void create_packet_ack(struct pkt *, int);
 
+void create_packet_nack(struct pkt *, int);
+
 #endif
