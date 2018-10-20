@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 struct __attribute__((__packed__)) pkt {
     uint8_t  window:5;
@@ -16,16 +17,16 @@ struct __attribute__((__packed__)) pkt {
     char* payload;
 };
 
-int create_storage_buffer(struct pkt* sendingBuf[]){
+int create_storage_buffer(struct pkt* storageBuf[]){
 	int i;
 	for(i=0; i<WINDOW_SIZE ; i++){
-		sendingBuf[i] = (struct pkt*) malloc(sizeof(pkt_t));
-		if(sendingBuf[i] == NULL){
+		storageBuf[i] = (struct pkt*) malloc(sizeof(pkt_t));
+		if(storageBuf[i] == NULL){
 			fprintf(stderr, "%s\n", "Erreur : malloc sendingBuf");
 			return -1;
 		}
 	}
-	if(sendingBuf == NULL){
+	if(storageBuf == NULL){
 		fprintf(stderr, "%s\n", "Erreur : malloc sendingBuf");
 		return -1;
 	}
@@ -33,9 +34,35 @@ int create_storage_buffer(struct pkt* sendingBuf[]){
 	return 0;
 }
 
-void del_storage_buf(struct pkt* receivingBuf[]){
+void del_storage_buf(struct pkt* storageBuf[]){
 	int i;
 	for(i=0; i<WINDOW_SIZE; i++){
-		free(receivingBuf[i]);
+		free(storageBuf[i]);
 	}
+}
+
+int find_pkt(int seqnum, int window[]){
+	int i;
+	for(i=0;i<WINDOW_SIZE;i++){
+		if(window[i] == seqnum){
+			return i;
+		}
+	}
+	return -1;
+}
+
+void window_slide(int window[]){
+	int i;
+	for(i=0;i<WINDOW_SIZE-1;i++){
+		window[i] = window[i+1];
+	}
+	window[WINDOW_SIZE-1] = (window[WINDOW_SIZE] + 1) % (MAX_SEQNUM);
+}
+
+void update_sendingTime(clock_t sendingTime[]){
+	int i;
+	for(i=0;i<WINDOW_SIZE-1;i++){
+		sendingTime[i] = sendingTime[i+1];
+	}
+	sendingTime[WINDOW_SIZE-1] = -1;
 }

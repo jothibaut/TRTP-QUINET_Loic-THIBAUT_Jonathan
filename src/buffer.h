@@ -2,10 +2,11 @@
 #define __BUFFER_H_
 
 #include "packet_interface.h"
+#include <time.h>
 
 #define BUFFER_SIZE 1024
 
-#define WINDOW_SIZE 3 //Max : (2^n)/2 = 16 --> cfr p.25 sylla
+#define WINDOW_SIZE 2 //Max : (2^n)/2 = 16 --> cfr p.25 sylla
 
 #define MAX_SEQNUM 4 //!!!!!!!! A modifier : 255 !!!!!!!!!!!!
 
@@ -14,5 +15,11 @@
 int create_storage_buffer(struct pkt **);
 
 void del_storage_buf(struct pkt **);
+
+int find_pkt(int, int*);
+
+void window_slide(int *);
+
+void update_sendingTime(clock_t[]);
 
 #endif

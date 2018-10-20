@@ -26,7 +26,7 @@ struct __attribute__((__packed__)) pkt {
 };
 
 
-//Réalisé avec l'aide de Thomas Reniers
+//La fonction read_write_loop qui devait être implémentée sur Inginious a été réalisée avec l'aide de Thomas Reniers
 
 void read_write_loop(int sfd){
     struct pollfd fds[2];
@@ -34,12 +34,17 @@ void read_write_loop(int sfd){
     int seqnum = 0;
     int sendPktCount = 0; //Nbr de pkt envoyés
     int sendBufCount = 0; // Nombre de places occupées dans le sendingBuf
-    //int lastAck = 0;
+    int lastAck = 0;
     int i;
 
     char buf[BUFFER_SIZE];
     char buf_ack[BUFFER_SIZE];
     char buf_nack[BUFFER_SIZE];
+
+    int binaryReceivingBuf[WINDOW_SIZE];
+    for(i=0;i<WINDOW_SIZE;i++){
+    	binaryReceivingBuf[i] = 0;
+    }
 
     clock_t sendingTime[WINDOW_SIZE];
     
@@ -71,8 +76,12 @@ void read_write_loop(int sfd){
 		return;
 	}
 
-	//int sendingWindow[WINDOW_SIZE];
-	//int receivingWindow[WINDOW_SIZE];
+	int sendingWindow[WINDOW_SIZE];
+	int receivingWindow[WINDOW_SIZE];
+	for(i=0;i<WINDOW_SIZE;i++){
+		sendingWindow[i] = i;
+		receivingWindow[i] = i;
+	}
 
 	struct pkt* (sendingBuf[WINDOW_SIZE]);
 	struct pkt* (receivingBuf[WINDOW_SIZE]);
@@ -116,7 +125,8 @@ void read_write_loop(int sfd){
         		for(i=0;i<WINDOW_SIZE;i++){
         			clock_t t = clock();
         			float diff = ((float)(t - sendingTime[i]) / 1000000.0F ) * 1000;
-        			if(diff > RTO){
+        			if(diff > RTO && sendingTime[i] != -1){
+        				sendingTime[i] = t;
         				pkt_status_code statEncode = pkt_encode(sendingBuf[i], buf, bufLen);
 			            if(statEncode != 0){
 			                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data (renvoi)");
@@ -146,6 +156,7 @@ void read_write_loop(int sfd){
 	                return;
 	            }
 	            memcpy(sendingBuf[sendPktCount%WINDOW_SIZE], thePkt, sizeof(struct pkt));
+	            sendBufCount++;
 	            sendingTime[sendPktCount%WINDOW_SIZE] = clock();
 
 	            pkt_status_code statEncode = pkt_encode(thePkt, buf, bufLen);
@@ -184,10 +195,13 @@ void read_write_loop(int sfd){
 	        	if(statDecode == E_CRC){ //Le CRC n'a pas fonctionné
 	        		//discard le paquet --> RTO le renverra
 	        		//discard l'ack si on est dans le sender
+	        		//NB : par discard, on entend ne pas stocker le pkt dans le buf
+	        		continue;
 	        	}
 	        }else if(pkt_get_tr(thePkt) == 1){ //Paquet tronqué
 	        	if(pkt_get_type(thePkt) == PTYPE_ACK || pkt_get_type(thePkt) == PTYPE_NACK){ //Si TR = 1 et type autre que data, on ignore
 	        		//on ignore le paquet
+	        		continue;
 	        	}else{
 	        		create_packet_nack(thePkt_nack, seqnum);
 
@@ -204,39 +218,103 @@ void read_write_loop(int sfd){
 	        	}
 	        }else{ //Cas classique
 	        	if(pkt_get_type(thePkt) == PTYPE_DATA){
-	        		//Si seqnum pas dans la rcv win
-	        			//J'ignore le paquet
-	        		//Si seqnum premier elem de la rcv win
-		        		//J'envois un ack du meme seqnum que thePkt
-		        		//Je slide la receive window
-	        		//Si seqnum dans la rcv win mais pas 1er elem
-	        			//Je stock le pkt
-		        	create_packet_ack(thePkt_ack, seqnum); //Attention pas le bon seqnum
 
-		        	pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
-		            if(statEncode != 0){
-		                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
-		                return;
-		            }
+	        		int index = find_pkt(pkt_get_seqnum(thePkt), receivingWindow);
+	        		if(index == -1){
+	        			//envoit paquet avec lastAck
+	        			create_packet_ack(thePkt_ack, lastAck);
 
-		            if(write(sfd, buf_ack, *bufLen) == -1){
-		                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
-		                return;
-		            }
+			        	pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
+			            if(statEncode != 0){
+			                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+			                return;
+			            }
 
-			        if(fwrite(buf, sizeof(char), r, stdout) == 0){
-	                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
-	                    return;
-	                }
-			        fflush(stdout);
+			            if(write(sfd, buf_ack, *bufLen) == -1){
+			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+			                return;
+			            }
+	        		}else if(index == 0){
+
+				        if(fwrite(pkt_get_payload(thePkt), sizeof(char), pkt_get_length(thePkt), stdout) == 0){
+		                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
+		                    return;
+		                }
+				        fflush(stdout);
+				        lastAck = pkt_get_seqnum(thePkt);
+				        window_slide(receivingWindow);
+
+				        int j = 1;
+				        while(binaryReceivingBuf[j] == 1){ //Vider le buffer
+				        	binaryReceivingBuf[j] = 0;
+				        	if(fwrite(pkt_get_payload(receivingBuf[j]), sizeof(char), pkt_get_length(receivingBuf[j]), stdout) == 0){
+			                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
+			                    return;
+			                }
+					        fflush(stdout);
+					        lastAck = pkt_get_seqnum(receivingBuf[j]);
+					        window_slide(receivingWindow);
+					        j++;
+				        }
+
+				        create_packet_ack(thePkt_ack, lastAck);
+
+				        pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
+			            if(statEncode != 0){
+			                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+			                return;
+			            }
+
+			            if(write(sfd, buf_ack, *bufLen) == -1){
+			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+			                return;
+			            }
+	        		}else{
+	        			memcpy(receivingBuf[index], thePkt, sizeof(struct pkt));
+	        			binaryReceivingBuf[index] = 1;
+
+	        			create_packet_ack(thePkt_ack, lastAck);
+
+				        pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
+			            if(statEncode != 0){
+			                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+			                return;
+			            }
+
+			            if(write(sfd, buf_ack, *bufLen) == -1){
+			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+			                return;
+			            }
+	        		}
 			    }else if(pkt_get_type(thePkt) == PTYPE_ACK){
 			    	//Si ack présent dans la window, je discard les n elem avant cet ack(celui-ci compris)
 			    		//Je slide la sending window de n et discard les n premiers elem de sending buf
-
-			    	//Si ack ne correspond pas a un num de la window, on renvoit tout le sending buf
+			    	int index = find_pkt(pkt_get_seqnum(thePkt), sendingWindow);
+			    	if(i == -1){
+			    		fprintf(stderr, "%s\n", "L'ack correspond à un seqnum qui n'est pas présent dans la sendingWindow");
+			    	}
+			    	while(index != -1){
+			    		sendBufCount--;
+			    		window_slide(sendingWindow);
+			    		update_sendingTime(sendingTime);
+			    	}
 			    	continue;
 			    }else if(pkt_get_type(thePkt) == PTYPE_NACK){
 			    	//On renvoit le paquet present dans le sending buf correspondant au seqnum
+			    	for(i=0;i<WINDOW_SIZE;i++){
+			    		if(pkt_get_seqnum(receivingBuf[i]) == pkt_get_seqnum(thePkt)){
+			    			pkt_status_code statEncode = pkt_encode(receivingBuf[i], buf, bufLen);
+				            if(statEncode != 0){
+				                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data");
+				                return;
+				            }
+
+				            if(write(sfd, buf, *bufLen) == -1){
+				                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+				                return;
+				            }
+			    		}
+			    	}
 			    }
 	        }  
         }
