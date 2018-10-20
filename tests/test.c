@@ -1,13 +1,13 @@
-#include <CUnit/Cunit.h>
 #include <CUnit/Basic.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <zlib.h>
-#include "../src/packet_interface.h"
 #include <string.h>
 #include <stdint.h>
 #include <arpa/inet.h>
+#include "../src/packet_interface.h"
+//#include <CUnit/Cunit.h>
 
 int setup(void){
 	return 0;
@@ -19,10 +19,12 @@ int teardown(void) {
 
 void test_get(void){
 	struct pkt* test=pkt_new();
-	b=0b01010100;
+	uint8_t b=0b01010100;
 	memcpy(test,&b,sizeof(uint8_t));
-	test->seqnum=0b01011011;
-	test->length=0b0000010110101101;
+	uint8_t c=0b01011011;
+	pkt_set_seqnum(test, c);
+	uint16_t d=0b0000010110101101;
+	pkt_set_length(test, d);
 	
 	CU_ASSERT_EQUAL(pkt_get_tr(test),0);
 	CU_ASSERT_EQUAL(pkt_get_type(test),01);
@@ -44,7 +46,7 @@ int main(){
 		return CU_get_error();
 	}
 	/* ajoute des teste à la suite*/
-	if( (NULL == CU_add_test(pSuite,"Test création fractale et retourne ces élements",test_get){
+	if( (NULL == CU_add_test(pSuite,"Test création fractale et retourne ces élements",test_get))){
 		CU_cleanup_registry();
 		return CU_get_error();
 	}
@@ -53,9 +55,7 @@ int main(){
 	CU_basic_run_tests();
 	CU_basic_show_failures(CU_get_failure_list());
 	/* fait tourner les tests en utilisant l'interface automatisée*/
- 	CU_automated_run_tests();
- 	CU_list_tests_to_file();
- 	/*fait tourner les tests en utilisant l'interface de controle*/
+ 	CU_basic_run_tests();
 	/*clean le répertoire et le retourne*/
 	CU_cleanup_registry();
 	return CU_get_error();
