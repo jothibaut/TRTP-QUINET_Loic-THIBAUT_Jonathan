@@ -22,9 +22,9 @@ debug: CFLAGS += -g -DDEBUG -Wno-unused-parameter -fno-omit-frame-pointer
 debug: clean sender receiver
 
 # We use an implicit rule to build an executable named 'sender'
-sender: sender.o read_write_loop.o create_socket.o real_address.o wait_for_client.o create_packet.o packet_implem.o -lz
+sender: sender.o read_write_loop.o create_socket.o real_address.o wait_for_client.o create_packet.o packet_implem.o buffer.o -lz
 
-receiver: receiver.o read_write_loop.o create_socket.o real_address.o wait_for_client.o create_packet.o packet_implem.o -lz
+receiver: receiver.o read_write_loop.o create_socket.o real_address.o wait_for_client.o create_packet.o packet_implem.o buffer.o -lz
 
 tests:
 	cd ../tests && $(MAKE)
@@ -32,4 +32,4 @@ tests:
 .PHONY: clean
 
 clean:
-	@rm -f sender sender.o receiver receiver.o read_write_loop.o create_socket.o real_address.o wait_for_client.o create_packet.o packet_implem.o
+	@rm -f sender sender.o receiver receiver.o read_write_loop.o create_socket.o real_address.o wait_for_client.o create_packet.o packet_implem.o buffer.o
