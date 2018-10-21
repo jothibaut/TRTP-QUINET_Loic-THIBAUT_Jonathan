@@ -55,8 +55,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "Could not resolve hostname %s: %s\n", host, err);
 		return EXIT_FAILURE;
 	}
-
-	fprintf(stderr, "%s\n", "Receiver crée le socket");
+	
 	sfd = create_socket(&addr, port, NULL, -1); /* Bound */
 	if (sfd > 0 && wait_for_client(sfd) < 0) { /* Connected */ //Si j'ai un socket mais qu'il y a une erreur dans wait_for_client
 		fprintf(stderr,
@@ -70,7 +69,7 @@ int main(int argc, char *argv[])
 	}
 
 	fprintf(stderr, "%s\n", "Receiver entre dans la read_write_loop");
-	read_write_loop(sfd);
+	read_write_loop(sfd, -1);
 
 	return EXIT_SUCCESS;
 

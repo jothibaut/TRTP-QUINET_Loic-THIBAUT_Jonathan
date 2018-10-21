@@ -28,7 +28,9 @@ struct __attribute__((__packed__)) pkt {
 
 //La fonction read_write_loop qui devait être implémentée sur Inginious a été réalisée avec l'aide de Thomas Reniers
 
-void read_write_loop(int sfd){
+void read_write_loop(int sfd, int readFd){
+
+	int timeOut = 7000; //Temps d'attente de poll --> [ms]
     struct pollfd fds[2];
     int ret;
     int seqnum = 0;
@@ -37,7 +39,7 @@ void read_write_loop(int sfd){
     int lastAck = 0;
     int i;
 
-    char buf[BUFFER_SIZE];
+    char buf[BUFFER_SIZE]; //BUFFER_SIZE
     char buf_ack[BUFFER_SIZE];
     char buf_nack[BUFFER_SIZE];
 
@@ -103,20 +105,26 @@ void read_write_loop(int sfd){
 		return;
 	}
 
-    fds[0].fd = 0; //STDIN_FILENO
+    fds[0].fd = readFd;
     fds[0].events = POLLIN;
 
     fds[1].fd = sfd;
     fds[1].events = POLLIN;
     
     for(;;){
-        ret = poll(fds, 2, -1);
+    	fprintf(stderr, "%s\n", "on va exécuter poll");
+        ret = poll(fds, 2, timeOut);
         if (ret == -1) {
             fprintf(stderr, "%s\n", "Echec lors de l execution de poll");
             return;
+        }else if(ret == 0){
+        	fprintf(stderr, "%s\n", "Timed out");
+        	return;
         }
 
-        if (fds[0].revents & POLLIN){ //STDIN
+        fprintf(stderr, "%s\n", "on a exécuté poll");
+
+        if (fds[0].revents & POLLIN){ //STDIN ou FILE
         	//If sending buffer rempli
         		//si le RTO d'un ou pls pkt a expiré
         			//On renvoit ce(s) pkt
@@ -133,15 +141,15 @@ void read_write_loop(int sfd){
 			                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data (renvoi)");
 			                return;
 			            }
-			            if(write(sfd, buf, *bufLen) == -1){
+			            if(write(fds[1].fd, buf, *bufLen) == -1){
 			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 			                return;
 			            }
         			}
         		}
         	}else{
-        		int r = read(0, buf, BUFFER_SIZE);
-	            if(r == EOF){
+        		int r = read(fds[0].fd, buf, BUFFER_SIZE);
+	            if(r == 0){
 	                fprintf(stderr, "%s\n", "stdin a atteint EOF");
 	                return;
 	            }
@@ -170,10 +178,15 @@ void read_write_loop(int sfd){
 	            }
 	            fprintf(stderr, "%s\n", "on a encodé le paquet");
 
-	            if(write(sfd, buf, *bufLen) == -1){
+	            if(write(fds[1].fd, buf, *bufLen) == -1){
 	                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 	                return;
 	            }
+
+	            int w = fwrite(buf, *bufLen, sizeof(char), stdout);
+				if(w == 0){
+					fprintf(stderr, "%s\n", "Error : écriture");
+				}
 	            fprintf(stderr, "%s\n", "on a envoyé le paquet sur sfd");
 	            sendPktCount++;
         	}
@@ -184,12 +197,12 @@ void read_write_loop(int sfd){
 
         
         if (fds[1].revents & POLLIN){ //SFD
-	        int r = read(sfd, buf, BUFFER_SIZE);
+	        int r = read(fds[1].fd, buf, BUFFER_SIZE);
 	        if(r == -1){
 	            fprintf(stderr, "%s\n", "Echec lors de la lecture du socket");
 	            return;
 	        }
-	        else if(r == EOF){
+	        else if(r == 0){
 	            fprintf(stderr, "%s\n", "le socket a atteint EOF");
 	            return;
 	        }
@@ -221,7 +234,7 @@ void read_write_loop(int sfd){
 		            }
 		            fprintf(stderr, "%s\n", "on a ecnodé un paquet NACK");
 
-		            if(write(sfd, buf_ack, *bufLen) == -1){
+		            if(write(fds[1].fd, buf_ack, *bufLen) == -1){
 		                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 		                return;
 		            }
@@ -251,29 +264,36 @@ void read_write_loop(int sfd){
 			            }
 			            fprintf(stderr, "%s\n", "on encode un paquet ACK avec le dernier seqnum");
 
-			            if(write(sfd, buf_ack, *bufLen) == -1){
+			            if(write(fds[1].fd, buf_ack, *bufLen) == -1){
 			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 			                return;
 			            }
 			            fprintf(stderr, "%s\n", "on envoit un paquet ACK avec le dernier seqnum sur sfd");
 	        		}else if(index == 0){
 	        			printf("%s\n", "le pkt reçu correspond au premier slot de la window");
+	        			//
+	        			// Possiblement à écrire dans un file
+	        			//
 				        if(fwrite(pkt_get_payload(thePkt), sizeof(char), pkt_get_length(thePkt), stdout) == 0){
 		                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
 		                    return;
 		                }
 				        fflush(stdout);
 				        lastAck = pkt_get_seqnum(thePkt);
+				        /*
 				        int k;
 	        			for(k=0;k<WINDOW_SIZE;k++){
 	        				fprintf(stderr, "%d", receivingWindow[k]);
 	        			}
 	        			fprintf(stderr, "\n");
+	        			*/
 				        window_slide(receivingWindow);
+				        /*
 				        for(k=0;k<WINDOW_SIZE;k++){
 	        				fprintf(stderr, "%d", receivingWindow[k]);
 	        			}
 	        			fprintf(stderr, "\n");
+	        			*/
 
 				        int j = 1;
 				        while(binaryReceivingBuf[j] == 1 && WINDOW_SIZE > 1){ //Vider le buffer
@@ -288,10 +308,12 @@ void read_write_loop(int sfd){
 					        window_slide(receivingWindow);
 					        j++;
 				        }
+				        /*
 	        			for(k=0;k<WINDOW_SIZE;k++){
 	        				fprintf(stderr, "%d", receivingWindow[k]);
 	        			}
 	        			fprintf(stderr, "\n");
+	        			*/
 
 				        create_packet_ack(thePkt_ack, lastAck);
 
@@ -302,7 +324,7 @@ void read_write_loop(int sfd){
 			            }
 			            fprintf(stderr, "%s\n", "on a encodé un paquet ACK");
 
-			            if(write(sfd, buf_ack, *bufLen) == -1){
+			            if(write(fds[1].fd, buf_ack, *bufLen) == -1){
 			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 			                return;
 			            }
@@ -321,7 +343,7 @@ void read_write_loop(int sfd){
 				                return;
 				            }
 
-				            if(write(sfd, buf_ack, *bufLen) == -1){
+				            if(write(fds[1].fd, buf_ack, *bufLen) == -1){
 				                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 				                return;
 				            }
@@ -355,7 +377,7 @@ void read_write_loop(int sfd){
 				                return;
 				            }
 
-				            if(write(sfd, buf, *bufLen) == -1){
+				            if(write(fds[1].fd, buf, *bufLen) == -1){
 				                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 				                return;
 				            }

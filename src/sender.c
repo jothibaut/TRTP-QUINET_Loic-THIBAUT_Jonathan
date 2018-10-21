@@ -1,6 +1,9 @@
 #include <stdlib.h> /* EXIT_X */
 #include <stdio.h> /* fprintf */
 #include <unistd.h> /* getopt */
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 
 #include "real_address.h"
@@ -16,8 +19,9 @@ int main(int argc, char *argv[])
 	int port = 12345;
 	int opt;
 	char *host = "::1"; //localhost
-	//char *file;
-	//int isFile =0;
+	char *file;
+	int readFd = 0;
+	int isFile =0;
 	int sfd;
 
 	if(argc < 3){
@@ -28,24 +32,28 @@ int main(int argc, char *argv[])
 	while ((opt = getopt(argc, argv, "f:")) != -1) {
 		switch (opt) {
 			case 'f':
-				//isFile = 1;
-				//file = optarg;
+				isFile = 1;
+				file = optarg;
+				fprintf(stderr, "%s\n", file);
 				break;
 		}
 	}
 
-	/*
+	
 	if(isFile == 1){
+		readFd = open(file, O_RDONLY);
+		if(readFd == -1){
+			fprintf(stderr, "%s\n", "Echec lors de l'ouverture du fichier de lecture");
+			return EXIT_FAILURE;
+		}
 		host = argv[3];
+		fprintf(stderr, "%s\n", host);
 		port = atoi(argv[4]);
+		fprintf(stderr, "%d\n", port);
 	}else{
 		host = argv[1];
 		port = atoi(argv[2]);
 	}
-	*/
-
-	host = argv[1];
-	port = atoi(argv[2]);
 
 	// Resolve the hostname
 	struct sockaddr_in6 addr;
@@ -62,10 +70,13 @@ int main(int argc, char *argv[])
 	}
 	
 	fprintf(stderr, "%s\n", "Sender entre dans la read_write_loop");
-	read_write_loop(sfd);
+	read_write_loop(sfd, readFd);
 
-
-
+	if(isFile == 1){
+		if(close(readFd) == -1){
+			fprintf(stderr, "%s\n", "Echec lors la fermeture du fichier de lecture");
+		}
+	}
 
 
 	return EXIT_SUCCESS;

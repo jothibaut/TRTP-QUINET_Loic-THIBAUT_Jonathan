@@ -4,7 +4,7 @@
 #include "packet_interface.h"
 #include <time.h>
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 528
 
 #define WINDOW_SIZE 2 //Max : (2^n)/2 = 16 --> cfr p.25 sylla
 
