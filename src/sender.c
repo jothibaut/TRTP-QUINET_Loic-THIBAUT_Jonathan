@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
 			case 'f':
 				isFile = 1;
 				file = optarg;
+				fprintf(stderr, "%s\n", file);
 				break;
 		}
 	}
