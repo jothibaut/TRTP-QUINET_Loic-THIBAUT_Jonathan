@@ -14,7 +14,7 @@ receiver:
 	cd src && $(MAKE)
 
 tests:
-	cd src && $(MAKE) tests
+	cd tests && $(MAKE)
 
 .PHONY: clean
 
