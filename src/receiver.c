@@ -40,16 +40,13 @@ int main(int argc, char *argv[])
 
 	
 	if(isFile == 1){
-		fprintf(stderr, "%s\n", "on a bien une file");
 		writeFile = fopen(file, "w+");
 		if(writeFile == NULL){
 			fprintf(stderr, "%s\n", "Echec lors de l'ouverture du fichier de lecture");
 			return EXIT_FAILURE;
 		}
 		host = argv[3];
-		printf("host : %s\n", host);
 		port = atoi(argv[4]);
-		printf("port : %d\n", port);
 	}else{
 		host = argv[1];
 		port = atoi(argv[2]);

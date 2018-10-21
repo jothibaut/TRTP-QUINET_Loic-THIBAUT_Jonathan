@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
 			case 'f':
 				isFile = 1;
 				file = optarg;
-				fprintf(stderr, "%s\n", file);
 				break;
 		}
 	}
@@ -67,7 +66,6 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 	
-	fprintf(stderr, "%s\n", "Sender entre dans la read_write_loop");
 	read_write_loop(sfd, readFd, NULL);
 
 	if(isFile == 1){

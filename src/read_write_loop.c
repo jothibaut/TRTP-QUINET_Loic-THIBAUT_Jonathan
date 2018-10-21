@@ -107,7 +107,6 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
     fds[1].events = POLLIN;
     
     for(;;){
-    	fprintf(stderr, "%s\n", "on va exécuter poll");
         ret = poll(fds, 2, timeOut);
         if (ret == -1) {
             fprintf(stderr, "%s\n", "Echec lors de l execution de poll");
@@ -117,15 +116,12 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         	return;
         }
 
-        fprintf(stderr, "%s\n", "on a exécuté poll");
-
         if (fds[0].revents & POLLIN){ //STDIN ou FILE
         	//If sending buffer rempli
         		//si le RTO d'un ou pls pkt a expiré
         			//On renvoit ce(s) pkt
         		//on passe à la lecture sur sfd
         	if(sendBufCount == WINDOW_SIZE){
-        		fprintf(stderr, "%s\n", "sendingBuf est plein");
         		for(i=0;i<WINDOW_SIZE;i++){
         			clock_t t = clock();
         			float diff = ((float)(t - sendingTime[i]) / 1000000.0F ) * 1000;
@@ -146,9 +142,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         		}
         	}else{
         		char buf_payload[512];
-        		printf("sizeof buf_payload %ld\n", sizeof(buf_payload));
         		int r = read(fds[0].fd, buf_payload, 512);
-        		fprintf(stderr, "le r : %d\n", r);
 	            if(r == 0){
 	                fprintf(stderr, "%s\n", "stdin a atteint EOF");
 	                return;
@@ -157,28 +151,21 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	                fprintf(stderr, "%s\n", "lecture stdin : erreur");
 	                return;
 	            }
-	            fprintf(stderr, "%s\n", "on a lu stdin");
 
 	            int w = fwrite(buf_payload, r, sizeof(char), stdout);
 				if(w == 0){
 					fprintf(stderr, "%s\n", "Error : écriture");
 				}
-	            fprintf(stderr, "%s\n", "on a affiché ce qu'on venait de lire sur stdout");
-	            printf("sizeof buf_payload %ld\n", sizeof(buf_payload));
 	            seqnum = sendPktCount % (MAX_SEQNUM+1);
-	            fprintf(stderr, "seqnum encodé = %d\n", seqnum);
-	            fprintf(stderr, "buf_payload : %s\n", buf_payload);
 
 	            create_packet_data(thePkt, buf_payload, seqnum, r);
 	            if(thePkt == NULL){
 	                fprintf(stderr, "%s\n", "Echec lors de la creation du paquet");
 	                return;
 	            }
-	            fprintf(stderr, "%s\n", pkt_get_payload(thePkt));
 	            memcpy(sendingBuf[sendPktCount%WINDOW_SIZE], thePkt, sizeof(struct pkt));
 	            sendBufCount++;
 	            sendingTime[sendPktCount%WINDOW_SIZE] = clock();
-	            fprintf(stderr, "%s\n", "on a sauvegardé le packet dans sendingBuf");
 
 	            *bufLen = 528;
 	            char buf_data[528];
@@ -187,14 +174,11 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data");
 	                return;
 	            }
-	            fprintf(stderr, "%s\n", "on a encodé le paquet");
 
 	            if(write(fds[1].fd, buf_data, *bufLen) == -1){
 	                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 	                return;
 	            }
-
-	            fprintf(stderr, "%s\n", "on a envoyé le paquet sur sfd");
 	            
 	            sendPktCount++;
         	}
@@ -215,7 +199,6 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	            fprintf(stderr, "%s\n", "le socket a atteint EOF");
 	            return;
 	        }
-	        fprintf(stderr, "%s\n", "on a lu le socket");
 
 
 	        pkt_status_code statDecode = pkt_decode(buf_rcv, r, thePkt);
@@ -243,24 +226,19 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 		                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
 		                return;
 		            }
-		            fprintf(stderr, "%s\n", "on a ecnodé un paquet NACK");
 
 		            if(write(fds[1].fd, buf_nack, *bufLen) == -1){
 		                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 		                return;
 		            }
-		            fprintf(stderr, "%s\n", "on a envoyé un paquet NACK sur sfd");
 	        	}
 	        }else{ //Cas classique
 	        	if(pkt_get_type(thePkt) == PTYPE_DATA){
 
 	        		int index = find_pkt(pkt_get_seqnum(thePkt), receivingWindow);
-	        		fprintf(stderr, "seqnum = %d\n", pkt_get_seqnum(thePkt));
-	        		fprintf(stderr, "index = %d\n", index);
 	        		if(index == -1){
 	        			//envoit paquet avec lastAck
 	        			fprintf(stderr, "%s\n", "Le paquet reçu ne figure pas dans le receivingBuf");
-	        			fprintf(stderr, "%d\n", pkt_get_seqnum(thePkt));
 	        			int j;
 	        			for(j=0;j<WINDOW_SIZE;j++){
 	        				fprintf(stderr, "%d", receivingWindow[j]);
@@ -275,15 +253,12 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
 			                return;
 			            }
-			            fprintf(stderr, "%s\n", "on encode un paquet ACK avec le dernier seqnum");
 
 			            if(write(fds[1].fd, buf_ack, *bufLen) == -1){
 			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 			                return;
 			            }
-			            fprintf(stderr, "%s\n", "on envoit un paquet ACK avec le dernier seqnum sur sfd");
 	        		}else if(index == 0){
-	        			printf("%s\n", "le pkt reçu correspond au premier slot de la window");
 	        			//
 	        			// Possiblement à écrire dans un file
 	        			//
@@ -291,7 +266,6 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 		                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
 		                    return;
 		                }
-		                printf("%s\n", "on vient d'écrire dans le fichier");
 		                if(writeFile == stdout){
 		                	fflush(stdout);
 		                }
@@ -313,7 +287,6 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 
 				        int j = 1;
 				        while(binaryReceivingBuf[j] == 1 && WINDOW_SIZE > 1){ //Vider le buffer
-				        	fprintf(stderr, "%s\n", "le receivingBuf contient des paquets à afficher");
 				        	binaryReceivingBuf[j] = 0;
 				        	if(fwrite(pkt_get_payload(receivingBuf[j]), sizeof(char), pkt_get_length(receivingBuf[j]), writeFile) == 0){
 			                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
@@ -343,16 +316,13 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
 			                return;
 			            }
-			            fprintf(stderr, "%s\n", "on a encodé un paquet ACK");
 
 			            if(write(fds[1].fd, buf_ack, *bufLen) == -1){
 			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 			                return;
 			            }
-			            fprintf(stderr, "%s\n", "on a envoyé un paquet ACK sur sfd");
 	        		}else{
 	        			if(WINDOW_SIZE >1){
-	        				fprintf(stderr, "%s\n", "on stock le paquet dans le receivingBuf");
 	        				memcpy(receivingBuf[index], thePkt, sizeof(struct pkt));
 		        			binaryReceivingBuf[index] = 1;
 
@@ -370,11 +340,9 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 				                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 				                return;
 				            }
-				            fprintf(stderr, "%s\n", "on a envoyé un paquet ACK sur sfd");
 	        			}
 	        		}
 			    }else if(pkt_get_type(thePkt) == PTYPE_ACK){
-			    	fprintf(stderr, "%s\n", "on a reçu un acknowledgement");
 			    	//Si ack présent dans la window, je discard les n elem avant cet ack(celui-ci compris)
 			    		//Je slide la sending window de n et discard les n premiers elem de sending buf
 			    	int index = find_pkt(pkt_get_seqnum(thePkt), sendingWindow);
@@ -388,13 +356,11 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			    		update_sendingTime(sendingTime);
 			    		index--;
 			    	}
-			    	fprintf(stderr, "%s\n", "on a updated la sendingWindow");
 			    	continue;
 			    }else if(pkt_get_type(thePkt) == PTYPE_NACK){
 			    	//On renvoit le paquet present dans le sending buf correspondant au seqnum
 			    	for(i=0;i<WINDOW_SIZE;i++){
 			    		if(pkt_get_seqnum(receivingBuf[i]) == pkt_get_seqnum(thePkt)){
-			    			fprintf(stderr, "%s\n", "on a trouvé le paquet correspondant au NACK");
 			    			char buf_data[528];
 			    			*bufLen = 528;
 			    			pkt_status_code statEncode = pkt_encode(receivingBuf[i], buf_data, bufLen);
@@ -407,7 +373,6 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 				                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
 				                return;
 				            }
-				            fprintf(stderr, "%s\n", "on renvoit ce paquet");
 			    		}
 			    	}
 			    }
