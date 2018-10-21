@@ -47,9 +47,7 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 		host = argv[3];
-		fprintf(stderr, "%s\n", host);
 		port = atoi(argv[4]);
-		fprintf(stderr, "%d\n", port);
 	}else{
 		host = argv[1];
 		port = atoi(argv[2]);
@@ -70,7 +68,7 @@ int main(int argc, char *argv[])
 	}
 	
 	fprintf(stderr, "%s\n", "Sender entre dans la read_write_loop");
-	read_write_loop(sfd, readFd);
+	read_write_loop(sfd, readFd, NULL);
 
 	if(isFile == 1){
 		if(close(readFd) == -1){

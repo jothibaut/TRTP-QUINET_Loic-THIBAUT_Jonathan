@@ -66,3 +66,11 @@ void update_sendingTime(clock_t sendingTime[]){
 	}
 	sendingTime[WINDOW_SIZE-1] = -1;
 }
+
+void update_binaryReceivingBuf(int buf[]){
+	int i;
+	for(i=0;i<WINDOW_SIZE-1;i++){
+		buf[i] = buf[i+1];
+	}
+	buf[WINDOW_SIZE-1] = 0;
+}

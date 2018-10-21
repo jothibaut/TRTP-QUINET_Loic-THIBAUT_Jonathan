@@ -1,6 +1,9 @@
 #include <stdlib.h> /* EXIT_X */
 #include <stdio.h> /* fprintf */
 #include <unistd.h> /* getopt */
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 
 #include "real_address.h"
@@ -16,9 +19,9 @@ int main(int argc, char *argv[])
 	int port = 12345;
 	int opt;
 	char *host = "::1"; //localhost
-	//char *file;
-	//int fd = 0;
-	//int isFile =0;
+	char *file;
+	FILE* writeFile = stdout;
+	int isFile =0;
 	int sfd;
 
 	if(argc < 3){
@@ -26,27 +29,31 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	while ((opt = getopt(argc, argv, "scp:h:")) != -1) {
+	while ((opt = getopt(argc, argv, "f:")) != -1) {
 		switch (opt) {
 			case 'f':
-				//isFile;
-				//file = optarg;
+				isFile = 1;
+				file = optarg;
 				break;
 		}
 	}
 
-	/*
+	
 	if(isFile == 1){
+		fprintf(stderr, "%s\n", "on a bien une file");
+		writeFile = fopen(file, "w+");
+		if(writeFile == NULL){
+			fprintf(stderr, "%s\n", "Echec lors de l'ouverture du fichier de lecture");
+			return EXIT_FAILURE;
+		}
 		host = argv[3];
+		printf("host : %s\n", host);
 		port = atoi(argv[4]);
+		printf("port : %d\n", port);
 	}else{
 		host = argv[1];
 		port = atoi(argv[2]);
 	}
-	*/
-
-	host = argv[1];
-	port = atoi(argv[2]);
 
 	/* Resolve the hostname */
 	struct sockaddr_in6 addr;
@@ -69,7 +76,14 @@ int main(int argc, char *argv[])
 	}
 
 	fprintf(stderr, "%s\n", "Receiver entre dans la read_write_loop");
-	read_write_loop(sfd, -1);
+	read_write_loop(sfd, -1, writeFile);
+
+	if(isFile == -1){
+		if(fclose(writeFile) != 0){
+			fprintf(stderr, "%s\n", "Echec lors de la fermeture du fichier d'écriture");
+			return EXIT_FAILURE;
+		}
+	}
 
 	return EXIT_SUCCESS;
 

@@ -22,4 +22,6 @@ void window_slide(int *);
 
 void update_sendingTime(clock_t[]);
 
+void update_binaryReceivingBuf(int *);
+
 #endif
