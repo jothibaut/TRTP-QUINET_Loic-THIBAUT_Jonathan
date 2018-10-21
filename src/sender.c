@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 	
+	fprintf(stderr, "%s\n", "Sender entre dans la read_write_loop");
 	read_write_loop(sfd);
 
 

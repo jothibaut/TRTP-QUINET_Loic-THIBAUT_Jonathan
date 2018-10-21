@@ -56,7 +56,7 @@ void window_slide(int window[]){
 	for(i=0;i<WINDOW_SIZE-1;i++){
 		window[i] = window[i+1];
 	}
-	window[WINDOW_SIZE-1] = (window[WINDOW_SIZE] + 1) % (MAX_SEQNUM);
+	window[WINDOW_SIZE-1] = (window[WINDOW_SIZE-1] + 1) % (MAX_SEQNUM+1);
 }
 
 void update_sendingTime(clock_t sendingTime[]){

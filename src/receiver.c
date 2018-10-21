@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-
+	fprintf(stderr, "%s\n", "Receiver crée le socket");
 	sfd = create_socket(&addr, port, NULL, -1); /* Bound */
 	if (sfd > 0 && wait_for_client(sfd) < 0) { /* Connected */ //Si j'ai un socket mais qu'il y a une erreur dans wait_for_client
 		fprintf(stderr,
@@ -69,6 +69,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	fprintf(stderr, "%s\n", "Receiver entre dans la read_write_loop");
 	read_write_loop(sfd);
 
 	return EXIT_SUCCESS;

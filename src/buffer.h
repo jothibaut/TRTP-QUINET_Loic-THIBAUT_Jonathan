@@ -8,7 +8,7 @@
 
 #define WINDOW_SIZE 2 //Max : (2^n)/2 = 16 --> cfr p.25 sylla
 
-#define MAX_SEQNUM 4 //!!!!!!!! A modifier : 255 !!!!!!!!!!!!
+#define MAX_SEQNUM 3 //!!!!!!!! A modifier : 255 !!!!!!!!!!!!
 
 #define RTO 71 //[ms]
 
