@@ -1,18 +1,22 @@
-all: edit
+# Default target
+all: clean sender receiver
+ 
+# If we run `make debug` instead, keep the debug symbols for gdb
+# and define the DEBUG macro.
+debug: CFLAGS += -g -DDEBUG -Wno-unused-parameter -fno-omit-frame-pointer
+debug: clean sender receiver
 
-edit : sender.o receiver.o packet_implem.o
-	gcc -g -Wall -Werror -o edit sender.o receiver.o  packet_implem.o
+# We use an implicit rule to build an executable named 'sender'
+sender: 
+	cd src && $(MAKE)
 
-sender.o : sender.c read_write_loop.o create_socket.o real_address.o wait_for_client.o create_packet.o packet_implem.o
-	gcc -g -Wall -Werror -o sender.c -lz
+receiver: 
+	cd src && $(MAKE)
 
-receiver.o : receiver.c	read_write_loop.o create_socket.o real_address.o wait_for_client.o create_packet.o packet_implem.o
-	gcc -g -Wall -Werror -o receiver.c -lz
+tests:
+	cd src && $(MAKE) tests
 
-packet_implem.o : packet_implem.c packet_interface.h
-	gcc -g -Wall -Werror -o packet_implem.c -lz
+.PHONY: clean
 
-tests: tests
-
-clean :
-	@rm -f edit sender sender.o receiver receiver.o packet_implem.o
+clean:
+	cd src && $(MAKE) clean
