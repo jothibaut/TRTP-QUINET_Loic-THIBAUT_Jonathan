@@ -37,7 +37,9 @@ int create_storage_buffer(struct pkt* storageBuf[]){
 void del_storage_buf(struct pkt* storageBuf[]){
 	int i;
 	for(i=0; i<WINDOW_SIZE; i++){
-		free(storageBuf[i]);
+		if(storageBuf[i] != NULL){
+			free(storageBuf[i]);
+		}
 	}
 }
 

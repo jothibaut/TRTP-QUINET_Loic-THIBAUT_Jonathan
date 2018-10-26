@@ -13,6 +13,13 @@
 #include "create_packet.h"
 #include "buffer.h"
 
+size_t *bufLen = NULL;
+struct pkt* thePkt = NULL;
+struct pkt* thePkt_ack = NULL;
+struct pkt* thePkt_nack = NULL;
+struct pkt* (sendingBuf[WINDOW_SIZE]);
+struct pkt* (receivingBuf[WINDOW_SIZE]);
+
 struct __attribute__((__packed__)) pkt {
     uint8_t  window:5;
     uint8_t  tr:1;
@@ -24,6 +31,27 @@ struct __attribute__((__packed__)) pkt {
     uint32_t crc2;
     char* payload;
 };
+
+void free_all(){
+	if(bufLen != NULL){
+		free(bufLen);
+	}
+
+	if(thePkt != NULL){
+		pkt_del(thePkt);
+	}
+
+	if(thePkt_ack != NULL){
+		pkt_del(thePkt_ack);
+	}
+
+	if(thePkt_nack != NULL){
+		pkt_del(thePkt_nack);
+	}
+
+	del_storage_buf(sendingBuf);
+	del_storage_buf(receivingBuf);
+}
 
 
 //La fonction read_write_loop qui devait être implémentée sur Inginious a été réalisée avec l'aide de Thomas Reniers
@@ -46,30 +74,29 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 
     clock_t sendingTime[WINDOW_SIZE];
     
-    size_t *bufLen = (size_t *) malloc(sizeof(size_t));
+    bufLen = (size_t *) malloc(sizeof(size_t));
+    if(bufLen == NULL){
+    	free_all();
+    }
 
-    struct pkt* thePkt = NULL;
     thePkt = pkt_new();
     if(thePkt == NULL){
 		fprintf(stderr, "%s\n", "Erreur : pkt_new_data");
-		free(bufLen);
+		free_all();
 		return;
 	}
-	struct pkt* thePkt_ack = NULL;
+	
 	thePkt_ack = pkt_new();
     if(thePkt_ack == NULL){
 		fprintf(stderr, "%s\n", "Erreur : pkt_new_ack");
-		free(bufLen);
-		pkt_del(thePkt);
+		free_all();
 		return;
 	}
-	struct pkt* thePkt_nack = NULL;
+	
 	thePkt_nack = pkt_new();
     if(thePkt_nack == NULL){
 		fprintf(stderr, "%s\n", "Erreur : pkt_new_nack");
-		free(bufLen);
-		pkt_del(thePkt);
-		pkt_del(thePkt_ack);
+		free_all();
 		return;
 	}
 
@@ -80,23 +107,14 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 		receivingWindow[i] = i;
 	}
 
-	struct pkt* (sendingBuf[WINDOW_SIZE]);
-	struct pkt* (receivingBuf[WINDOW_SIZE]);
 	if(create_storage_buffer(sendingBuf) == -1){
 		fprintf(stderr, "%s\n", "Erreur lors de la création du sendingBuf");
-		free(bufLen);
-		pkt_del(thePkt);
-		pkt_del(thePkt_ack);
-		pkt_del(thePkt_nack);
+		free_all();
 		return;
 	}
 	if(create_storage_buffer(receivingBuf) == -1){
 		fprintf(stderr, "%s\n", "Erreur lors de la création du receivingBuf");
-		free(bufLen);
-		pkt_del(thePkt);
-		pkt_del(thePkt_ack);
-		pkt_del(thePkt_nack);
-		del_storage_buf(sendingBuf);
+		free_all();
 		return;
 	}
 
@@ -132,10 +150,12 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         				pkt_status_code statEncode = pkt_encode(sendingBuf[i], buf_data, bufLen);
 			            if(statEncode != 0){
 			                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data (renvoi)");
+			                free_all();
 			                return;
 			            }
 			            if(write(fds[1].fd, buf_data, *bufLen) == -1){
 			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+			                free_all();
 			                return;
 			            }
         			}
@@ -145,10 +165,12 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         		int r = read(fds[0].fd, buf_payload, 512);
 	            if(r == 0){
 	                fprintf(stderr, "%s\n", "stdin a atteint EOF");
+	                free_all();
 	                return;
 	            }
 	            else if(r == -1){
 	                fprintf(stderr, "%s\n", "lecture stdin : erreur");
+	                free_all();
 	                return;
 	            }
 
@@ -161,6 +183,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	            create_packet_data(thePkt, buf_payload, seqnum, r);
 	            if(thePkt == NULL){
 	                fprintf(stderr, "%s\n", "Echec lors de la creation du paquet");
+	                free_all();
 	                return;
 	            }
 	            memcpy(sendingBuf[sendPktCount%WINDOW_SIZE], thePkt, sizeof(struct pkt));
@@ -172,11 +195,13 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	            pkt_status_code statEncode = pkt_encode(thePkt, buf_data, bufLen);
 	            if(statEncode != 0){
 	                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data");
+	                free_all();
 	                return;
 	            }
 
 	            if(write(fds[1].fd, buf_data, *bufLen) == -1){
 	                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+	                free_all();
 	                return;
 	            }
 	            
@@ -193,10 +218,12 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        int r = read(fds[1].fd, buf_rcv, 528);
 	        if(r == -1){
 	            fprintf(stderr, "%s\n", "Echec lors de la lecture du socket");
+	            free_all();
 	            return;
 	        }
 	        else if(r == 0){
 	            fprintf(stderr, "%s\n", "le socket a atteint EOF");
+	            free_all();
 	            return;
 	        }
 
@@ -209,6 +236,8 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        		//NB : par discard, on entend ne pas stocker le pkt dans le buf
 	        		fprintf(stderr, "%s\n","CRC du paquet invalide");
 	        		continue;
+	        	}else if(statDecode == E_NOMEM){
+	        		fprintf(stderr, "%s\n", "Erreur de mémoire");
 	        	}
 	        }else if(pkt_get_tr(thePkt) == 1){ //Paquet tronqué
 	        	if(pkt_get_type(thePkt) == PTYPE_ACK || pkt_get_type(thePkt) == PTYPE_NACK){ //Si TR = 1 et type autre que data, on ignore
@@ -224,11 +253,13 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 		        	pkt_status_code statEncode = pkt_encode(thePkt_nack, buf_nack, bufLen);
 		            if(statEncode != 0){
 		                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+		                free_all();
 		                return;
 		            }
 
 		            if(write(fds[1].fd, buf_nack, *bufLen) == -1){
 		                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+		                free_all();
 		                return;
 		            }
 	        	}
@@ -251,11 +282,13 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			        	pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
 			            if(statEncode != 0){
 			                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+			                free_all();
 			                return;
 			            }
 
 			            if(write(fds[1].fd, buf_ack, *bufLen) == -1){
 			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+			                free_all();
 			                return;
 			            }
 	        		}else if(index == 0){
@@ -264,6 +297,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        			//
 				        if(fwrite(pkt_get_payload(thePkt), sizeof(char), pkt_get_length(thePkt), writeFile) == 0){
 		                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
+		                    free_all();
 		                    return;
 		                }
 		                if(writeFile == stdout){
@@ -290,6 +324,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 				        	binaryReceivingBuf[j] = 0;
 				        	if(fwrite(pkt_get_payload(receivingBuf[j]), sizeof(char), pkt_get_length(receivingBuf[j]), writeFile) == 0){
 			                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
+			                    free_all();
 			                    return;
 			                }
 			                if(writeFile == stdout){
@@ -314,11 +349,13 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 				        pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
 			            if(statEncode != 0){
 			                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+			                free_all();
 			                return;
 			            }
 
 			            if(write(fds[1].fd, buf_ack, *bufLen) == -1){
 			                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+			                free_all();
 			                return;
 			            }
 	        		}else{
@@ -333,11 +370,13 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 					        pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
 				            if(statEncode != 0){
 				                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+				                free_all();
 				                return;
 				            }
 
 				            if(write(fds[1].fd, buf_ack, *bufLen) == -1){
 				                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+				                free_all();
 				                return;
 				            }
 	        			}
@@ -366,11 +405,13 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			    			pkt_status_code statEncode = pkt_encode(receivingBuf[i], buf_data, bufLen);
 				            if(statEncode != 0){
 				                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data");
+				                free_all();
 				                return;
 				            }
 
 				            if(write(fds[1].fd, buf_data, *bufLen) == -1){
 				                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+				                free_all();
 				                return;
 				            }
 			    		}
@@ -380,10 +421,5 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         }
     }
 
-    free(bufLen);
-    pkt_del(thePkt);
-    pkt_del(thePkt_ack);
-    pkt_del(thePkt_nack);
-    del_storage_buf(sendingBuf);
-    del_storage_buf(receivingBuf);
+    free_all();
 }
