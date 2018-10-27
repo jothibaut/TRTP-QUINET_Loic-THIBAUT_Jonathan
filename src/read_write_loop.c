@@ -163,8 +163,40 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         	}else{
         		char buf_payload[512];
         		int r = read(fds[0].fd, buf_payload, 512);
-	            if(r == 0){
-	                fprintf(stderr, "%s\n", "stdin a atteint EOF");
+		    	if(r==EOF){
+					fprintf(stderr, "%s\n", "stdin a atteint EOF");
+	                
+	                //crée un packet de ou la longueur vaut 0 (signifie une demande de déconnexion)
+	                create_packet_deco(thePkt, seqnum);
+	            	if(thePkt == NULL){
+	                	fprintf(stderr, "%s\n", "Echec lors de la creation du paquet de déconnexion");
+	                	free_all();
+	                	return;
+	                }
+	                
+	                *bufLen = 528;
+	            	char buf_data[528];
+	                pkt_status_code statEncode = pkt_encode(thePkt, buf_data, bufLen);
+	            	if(statEncode != 0){
+	                	fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet deconnexion");
+	                	free_all();
+	                	return;
+	            	}
+
+	            	if(write(fds[1].fd, buf_data, *bufLen) == -1){
+	                	fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket pour la deconnection");
+	                	free_all();
+	                	return;
+	            	}
+	                
+	                sendPktCount++;
+	                free_all();
+	                return;
+	                //fin de la demande de deconexion et se deconnecte direct
+	            }
+
+	            if(r == 0 && readFd!=0){
+	                fprintf(stderr, "%s\n", "a atteint la fin du fichier");
 	                
 	                //crée un packet de ou la longueur vaut 0 (signifie une demande de déconnexion)
 	                create_packet_deco(thePkt, seqnum);
