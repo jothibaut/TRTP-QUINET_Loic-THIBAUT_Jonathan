@@ -165,7 +165,8 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         		int r = read(fds[0].fd, buf_payload, 512);
 		    	if(r==EOF){
 					fprintf(stderr, "%s\n", "stdin a atteint EOF");
-	                
+	                printf("coucou EOF");
+	            	fflush(stdout);
 	                //crée un packet de ou la longueur vaut 0 (signifie une demande de déconnexion)
 	                create_packet_deco(thePkt, seqnum);
 	            	if(thePkt == NULL){
@@ -196,6 +197,8 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	            }
 
 	            if(r == 0 && readFd!=0){
+	            	printf("coucou");
+	            	fflush(stdout);
 	                fprintf(stderr, "%s\n", "a atteint la fin du fichier");
 	                
 	                //crée un packet de ou la longueur vaut 0 (signifie une demande de déconnexion)
@@ -323,6 +326,8 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        	}
 	        }else if(pkt_get_length(thePkt)==0){
 	        		//on a recu un packet symbolisant la deconnexion donc on se deconnecte aussi
+	        		printf("deco");
+	            	fflush(stdout);
 	        		return;        
 	        }else{ //Cas classique
 	        	if(pkt_get_type(thePkt) == PTYPE_DATA){
