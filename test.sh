@@ -4,7 +4,7 @@
 rm -f received_file input_file
 
 # Fichier au contenu aléatoire de 512 octets
-dd if=/dev/urandom of=input_file bs=1 count=20480 &> /dev/null
+dd if=/dev/urandom of=input_file bs=1 count=512 &> /dev/null
 
 # On lance le simulateur de lien avec 10% de pertes et un délais de 50ms
 # -p port -P forward port -l loss_rate [%] -d delay

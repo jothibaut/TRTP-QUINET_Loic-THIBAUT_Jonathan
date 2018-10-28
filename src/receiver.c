@@ -72,7 +72,6 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	
 	read_write_loop(sfd, -1, writeFile);
 
 	if(isFile == -1){
