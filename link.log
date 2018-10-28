@@ -1,4 +1,4 @@
-@@ Using random seed: 1540732682
+@@ Using random seed: 1540738227
 @@ Using parameters:
 .. port: 1341
 .. forward_port: 2456
@@ -7,9 +7,87 @@
 .. err_rate: 0
 .. cut_rate: 0
 .. loss_rate: 0
-.. seed: 1540732682
+.. seed: 1540738227
 .. link_direction: Both ways
-@@ Remote host is ::1 [59004]
+@@ Remote host is ::1 [59692]
 [SEQ   0] Sent packet (Forward).
 [SEQ   1] Sent packet (Reverse).
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).
 [SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Reverse).
+[SEQ   1] Sent packet (Reverse).
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Reverse).
+[SEQ   1] Sent packet (Reverse).
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Reverse).
+[SEQ   1] Sent packet (Reverse).
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Reverse).
+[SEQ   1] Sent packet (Reverse).
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Reverse).
+[SEQ   1] Sent packet (Reverse).
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Reverse).
+[SEQ   1] Sent packet (Reverse).
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Reverse).
+[SEQ   1] Sent packet (Reverse).
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Reverse).
+[SEQ   1] Sent packet (Reverse).
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Reverse).
+[SEQ   1] Sent packet (Reverse).
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).
+[SEQ   0] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).

@@ -69,6 +69,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
     int receivingWindowSize = MAX_WINDOW_SIZE;
     int receivingEmptySlot = receivingWindowSize;
     int sendingWindowSize = MAX_WINDOW_SIZE;
+    int lastAckSeqnum = -1;
     int i;
 
     int binaryReceivingBuf[MAX_WINDOW_SIZE];
@@ -171,78 +172,81 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         		int r = read(fds[0].fd, buf_payload, 512);
 	            //On atteint End Of File
 	            if(r == 0){ //Pour moi "&& readFd!=0" est inutile
-	            	fflush(stdout);
+	            	if(lastAckSeqnum == sendPktCount % (MAX_SEQNUM+1)){ //Si le dernier acquittement reçu correspond bien au paquet suivant qu'on aurait envoyé
+	            		fflush(stdout);
 	                
-	                //crée un packet de ou la longueur vaut 0 (signifie une demande de déconnexion)
-	                create_packet_deco(thePkt, seqnum);
-	            	if(thePkt == NULL){
-	                	fprintf(stderr, "%s\n", "Echec lors de la creation du paquet de déconnexion");
-	                	free_all();
-	                	return;
-	                }
-	                
-	                 *bufLen = 528;
-	            	char buf_data[528];
-	                pkt_status_code statEncode = pkt_encode(thePkt, buf_data, bufLen);
-	            	if(statEncode != 0){
-	                	fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet deconnexion");
-	                	free_all();
-	                	return;
-	            	}
+		                //crée un packet de ou la longueur vaut 0 (signifie une demande de déconnexion)
+		                create_packet_deco(thePkt, seqnum);
+		            	if(thePkt == NULL){
+		                	fprintf(stderr, "%s\n", "Echec lors de la creation du paquet de déconnexion");
+		                	free_all();
+		                	return;
+		                }
+		                
+		                 *bufLen = 528;
+		            	char buf_data[528];
+		                pkt_status_code statEncode = pkt_encode(thePkt, buf_data, bufLen);
+		            	if(statEncode != 0){
+		                	fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet deconnexion");
+		                	free_all();
+		                	return;
+		            	}
 
-	            	if(write(fds[1].fd, buf_data, *bufLen) == -1){
-	                	fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket pour la deconnection");
-	                	free_all();
-	                	return;
+		            	if(write(fds[1].fd, buf_data, *bufLen) == -1){
+		                	fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket pour la deconnection");
+		                	free_all();
+		                	return;
+		            	}
+		                
+		                sendPktCount++;
+		                receivingAvaiableSlotCount--;
+		                free_all();
+		                return;
+		                //fin de la demande de deconnexion et se deconnecte direct
 	            	}
-	                
-	                sendPktCount++;
-	                receivingAvaiableSlotCount--;
-	                free_all();
-	                return;
-	                //fin de la demande de deconnexion et se deconnecte direct
 	            }
 	            else if(r == -1){
 	                fprintf(stderr, "%s\n", "lecture stdin : erreur");
 	                free_all();
 	                return;
-	            }
+	            }else{
+	            	/*
+		            int w = fwrite(buf_payload, r, sizeof(char), stdout);
+					if(w == 0){
+						fprintf(stderr, "%s\n", "Error : ecriture");
+					}
+					*/
+		            seqnum = sendPktCount % (MAX_SEQNUM+1);
+		            create_packet_data(thePkt, buf_payload, seqnum, r);
+		            if(thePkt == NULL){
+		                fprintf(stderr, "%s\n", "Echec lors de la creation du paquet");
+		                free_all();
+		                return;
+		            }
+		            memcpy(sendingBuf[sendPktCount%MAX_WINDOW_SIZE], thePkt, sizeof(struct pkt));
+		            sendBufCount++;
+		            sendingTime[sendPktCount%MAX_WINDOW_SIZE] = clock();
 
-	            /*
-	            int w = fwrite(buf_payload, r, sizeof(char), stdout);
-				if(w == 0){
-					fprintf(stderr, "%s\n", "Error : ecriture");
-				}
-	            seqnum = sendPktCount % (MAX_SEQNUM+1);
-	            */
+		            *bufLen = 528;
+		            char buf_data[528];
+		            pkt_status_code statEncode = pkt_encode(thePkt, buf_data, bufLen);
+		            if(statEncode != 0){
+		                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data");
+		                free_all();
+		                return;
+		            }
 
-	            create_packet_data(thePkt, buf_payload, seqnum, r);
-	            if(thePkt == NULL){
-	                fprintf(stderr, "%s\n", "Echec lors de la creation du paquet");
-	                free_all();
-	                return;
-	            }
-	            memcpy(sendingBuf[sendPktCount%MAX_WINDOW_SIZE], thePkt, sizeof(struct pkt));
-	            sendBufCount++;
-	            sendingTime[sendPktCount%MAX_WINDOW_SIZE] = clock();
+		            if(write(fds[1].fd, buf_data, *bufLen) == -1){
+		                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+		                free_all();
+		                return;
+		            }
+		            
+		            sendPktCount++;
+		            receivingAvaiableSlotCount--;
 
-	            *bufLen = 528;
-	            char buf_data[528];
-	            pkt_status_code statEncode = pkt_encode(thePkt, buf_data, bufLen);
-	            if(statEncode != 0){
-	                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data");
-	                free_all();
-	                return;
-	            }
-
-	            if(write(fds[1].fd, buf_data, *bufLen) == -1){
-	                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
-	                free_all();
-	                return;
 	            }
 	            
-	            sendPktCount++;
-	            receivingAvaiableSlotCount--;
         	}
         }
 
@@ -303,7 +307,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        	}
 	        }else if(pkt_get_length(thePkt)==0 &&  pkt_get_type(thePkt) == PTYPE_DATA){
 	        		//on a recu un packet symbolisant la deconnexion donc on se deconnecte aussi
-	        		printf("Reception d un paquet de deconnexion");
+	        		printf("%s\n","Reception d un paquet de deconnexion");
 	            	fflush(stdout);
 					free_all();
 	        		return;        
@@ -430,6 +434,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			    		//Je slide la sending window de n et discard les n premiers elem de sending buf
 			    	receivingAvaiableSlotCount = pkt_get_window(thePkt);
 			    	int thisSeqnum = pkt_get_seqnum(thePkt);
+			    	lastAckSeqnum = thisSeqnum;
 			    	int index = find_pkt(thisSeqnum, sendingWindow);
 			    	if(index == -1){
 			    		fprintf(stderr, "%s\n", "L'ack correspond à un seqnum qui n'est pas présent dans la sendingWindow");
@@ -448,8 +453,10 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			    	continue;
 			    }else if(pkt_get_type(thePkt) == PTYPE_NACK){
 			    	//On renvoit le paquet present dans le sending buf correspondant au seqnum
+			    	int thisSeqnum = pkt_get_seqnum(thePkt);
+			    	lastAckSeqnum = thisSeqnum;
 			    	for(i=0;i<MAX_WINDOW_SIZE;i++){
-			    		if(pkt_get_seqnum(sendingBuf[i]) == pkt_get_seqnum(thePkt)){
+			    		if(pkt_get_seqnum(sendingBuf[i]) == thisSeqnum){
 			    			char buf_data[528];
 			    			*bufLen = 528;
 			    			pkt_status_code statEncode = pkt_encode(sendingBuf[i], buf_data, bufLen);
