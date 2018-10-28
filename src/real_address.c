@@ -43,6 +43,7 @@ const char * real_address(const char *address, struct sockaddr_in6 *rval){
     struct sockaddr_in6 *temp = (struct sockaddr_in6*) result->ai_addr;
     memcpy(rval, temp, sizeof(*temp));
     
+	free(hints);
     freeaddrinfo(result);
     return NULL;
 }

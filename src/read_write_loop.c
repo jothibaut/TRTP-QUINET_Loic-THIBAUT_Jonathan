@@ -128,9 +128,11 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         ret = poll(fds, 2, timeOut);
         if (ret == -1) {
             fprintf(stderr, "%s\n", "Echec lors de l execution de poll");
+			free_all();
             return;
         }else if(ret == 0){
         	fprintf(stderr, "%s\n", "Timed out");
+			free_all();
         	return;
         }
 
@@ -329,6 +331,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        		//on a recu un packet symbolisant la deconnexion donc on se deconnecte aussi
 	        		printf("Reception d un paquet de deconnexion");
 	            	fflush(stdout);
+					free_all();
 	        		return;        
 	        }else{ //Cas classique
 	        	if(pkt_get_type(thePkt) == PTYPE_DATA){
