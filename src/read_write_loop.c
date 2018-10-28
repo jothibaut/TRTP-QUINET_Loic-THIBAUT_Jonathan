@@ -163,6 +163,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         	}else{
         		char buf_payload[512];
         		int r = read(fds[0].fd, buf_payload, 512);
+        		/* On ne rentre jamais dans cette boucle
 		    	if(r==EOF){
 					fprintf(stderr, "%s\n", "stdin a atteint EOF");
 	                printf("coucou EOF");
@@ -195,9 +196,9 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	                return;
 	                //fin de la demande de deconexion et se deconnecte direct
 	            }
-
-	            if(r == 0 && readFd!=0){
-	            	printf("coucou");
+	            */
+	            //On atteint End Of File
+	            if(r == 0){ //Pour moi "&& readFd!=0" est inutile
 	            	fflush(stdout);
 	                fprintf(stderr, "%s\n", "a atteint la fin du fichier");
 	                
@@ -237,7 +238,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 
 	            int w = fwrite(buf_payload, r, sizeof(char), stdout);
 				if(w == 0){
-					fprintf(stderr, "%s\n", "Error : écriture");
+					fprintf(stderr, "%s\n", "Error : ecriture");
 				}
 	            seqnum = sendPktCount % (MAX_SEQNUM+1);
 
@@ -269,8 +270,6 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	            sendPktCount++;
         	}
         }
-
-
 
 
         
@@ -308,12 +307,15 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        	}else{
 	        		fprintf(stderr, "%s\n", "paquet tronqué");
 	        		create_packet_nack(thePkt_nack, seqnum);
+	        		if(thePkt_nack == NULL){
+	        			fprintf(stderr, "%s\n", "Echec lors de la creation du paquet nack");
+	        		}
 
 	        		char buf_nack[528];
 	        		*bufLen = 528;
 		        	pkt_status_code statEncode = pkt_encode(thePkt_nack, buf_nack, bufLen);
 		            if(statEncode != 0){
-		                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+		                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet nack");
 		                free_all();
 		                return;
 		            }
@@ -324,9 +326,9 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 		                return;
 		            }
 	        	}
-	        }else if(pkt_get_length(thePkt)==0){
+	        }else if(pkt_get_length(thePkt)==0 &&  pkt_get_type(thePkt) == PTYPE_DATA){
 	        		//on a recu un packet symbolisant la deconnexion donc on se deconnecte aussi
-	        		printf("deco");
+	        		printf("Reception d un paquet de deconnexion");
 	            	fflush(stdout);
 	        		return;        
 	        }else{ //Cas classique
