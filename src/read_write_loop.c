@@ -200,7 +200,6 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	            //On atteint End Of File
 	            if(r == 0){ //Pour moi "&& readFd!=0" est inutile
 	            	fflush(stdout);
-	                fprintf(stderr, "%s\n", "a atteint la fin du fichier");
 	                
 	                //crée un packet de ou la longueur vaut 0 (signifie une demande de déconnexion)
 	                create_packet_deco(thePkt, seqnum);
@@ -228,7 +227,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	                sendPktCount++;
 	                free_all();
 	                return;
-	                //fin de la demande de deconexion et se deconnecte direct
+	                //fin de la demande de deconnexion et se deconnecte direct
 	            }
 	            else if(r == -1){
 	                fprintf(stderr, "%s\n", "lecture stdin : erreur");
@@ -343,7 +342,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        				fprintf(stderr, "%d", receivingWindow[j]);
 	        			}
 	        			fprintf(stderr, "\n");
-	        			create_packet_ack(thePkt_ack, lastAck);
+	        			create_packet_ack(thePkt_ack, (lastAck+1)%(MAX_SEQNUM+1));
 
 	        			char buf_ack[528];
 	        			*bufLen = 528;
@@ -410,7 +409,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        			fprintf(stderr, "\n");
 	        			*/
 
-				        create_packet_ack(thePkt_ack, lastAck);
+				        create_packet_ack(thePkt_ack, (lastAck+1)%(MAX_SEQNUM+1));
 
 				        char buf_ack[528];
 				        *bufLen = 528;
@@ -431,7 +430,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        				memcpy(receivingBuf[index], thePkt, sizeof(struct pkt));
 		        			binaryReceivingBuf[index] = 1;
 
-		        			create_packet_ack(thePkt_ack, lastAck);
+		        			create_packet_ack(thePkt_ack, (lastAck+1)%(MAX_SEQNUM+1));
 
 		        			char buf_ack[528];
 		        			*bufLen = 528;
@@ -452,11 +451,16 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			    }else if(pkt_get_type(thePkt) == PTYPE_ACK){
 			    	//Si ack présent dans la window, je discard les n elem avant cet ack(celui-ci compris)
 			    		//Je slide la sending window de n et discard les n premiers elem de sending buf
-			    	int index = find_pkt(pkt_get_seqnum(thePkt), sendingWindow);
-			    	if(i == -1){
+			    	int thisSeqnum = pkt_get_seqnum(thePkt);
+			    	int index = find_pkt(thisSeqnum, sendingWindow);
+			    	if(index == -1){
 			    		fprintf(stderr, "%s\n", "L'ack correspond à un seqnum qui n'est pas présent dans la sendingWindow");
+			    		if(thisSeqnum == (sendPktCount+1) % (MAX_SEQNUM+1)){
+			    			fprintf(stderr, "%s\n", "Mais on peut quand meme envoyer le paquet suivant");
+				    		index = WINDOW_SIZE;
+				    	}
 			    	}
-			    	while(index != -1){
+			    	while(index != 0){
 			    		sendBufCount--;
 			    		window_slide(sendingWindow);
 			    		update_binaryReceivingBuf(binaryReceivingBuf);
@@ -467,10 +471,10 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			    }else if(pkt_get_type(thePkt) == PTYPE_NACK){
 			    	//On renvoit le paquet present dans le sending buf correspondant au seqnum
 			    	for(i=0;i<WINDOW_SIZE;i++){
-			    		if(pkt_get_seqnum(receivingBuf[i]) == pkt_get_seqnum(thePkt)){
+			    		if(pkt_get_seqnum(sendingBuf[i]) == pkt_get_seqnum(thePkt)){
 			    			char buf_data[528];
 			    			*bufLen = 528;
-			    			pkt_status_code statEncode = pkt_encode(receivingBuf[i], buf_data, bufLen);
+			    			pkt_status_code statEncode = pkt_encode(sendingBuf[i], buf_data, bufLen);
 				            if(statEncode != 0){
 				                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet data");
 				                free_all();
