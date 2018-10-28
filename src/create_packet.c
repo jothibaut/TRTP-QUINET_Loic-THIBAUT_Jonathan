@@ -59,7 +59,6 @@ void create_packet_data(struct pkt *thePkt, char *payload, int seqnum, int nByte
 		thePkt = NULL;
 		return;
 	}
-	fprintf(stderr, "create_packet : %s\n", pkt_get_payload(thePkt));
 
 	pkt_status_code statCrc2 = pkt_set_crc2(thePkt, 0);
 	if(statCrc2 != 0){
@@ -135,7 +134,7 @@ void create_packet_deco(struct pkt *thePkt, int seqnum){
 	}
 }
 
-void create_packet_ack(struct pkt *thePkt, int seqnum){
+void create_packet_ack(struct pkt *thePkt, int seqnum, int receivingEmptySlot){
 	pkt_status_code statTy = pkt_set_type(thePkt, PTYPE_ACK);
 	if(statTy != 0){
 		fprintf(stderr, "%s\n", "Erreur : pkt_set_type");
@@ -150,7 +149,7 @@ void create_packet_ack(struct pkt *thePkt, int seqnum){
 		return;
 	}
 
-	pkt_status_code statWin = pkt_set_window(thePkt, MAX_WINDOW_SIZE); //Fenêtre de 1 pour le moment --> A modifier par la suite
+	pkt_status_code statWin = pkt_set_window(thePkt, receivingEmptySlot); //Fenêtre de 1 pour le moment --> A modifier par la suite
 	if(statWin != 0){
 		fprintf(stderr, "%s\n", "Erreur : pkt_set_window");
 		thePkt = NULL;
@@ -201,7 +200,7 @@ void create_packet_ack(struct pkt *thePkt, int seqnum){
 
 }
 
-void create_packet_nack(struct pkt *thePkt, int seqnum){
+void create_packet_nack(struct pkt *thePkt, int seqnum, int receivingEmptySlot){
 	pkt_status_code statTy = pkt_set_type(thePkt, PTYPE_NACK);
 	if(statTy != 0){
 		fprintf(stderr, "%s\n", "Erreur : pkt_set_type");
@@ -216,7 +215,7 @@ void create_packet_nack(struct pkt *thePkt, int seqnum){
 		return;
 	}
 
-	pkt_status_code statWin = pkt_set_window(thePkt, MAX_WINDOW_SIZE); //Fenêtre de 1 pour le moment --> A modifier pasr la suite
+	pkt_status_code statWin = pkt_set_window(thePkt, receivingEmptySlot); //Fenêtre de 1 pour le moment --> A modifier pasr la suite
 	if(statWin != 0){
 		fprintf(stderr, "%s\n", "Erreur : pkt_set_window");
 		thePkt = NULL;

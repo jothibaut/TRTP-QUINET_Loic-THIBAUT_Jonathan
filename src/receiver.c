@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	fprintf(stderr, "%s\n", "Receiver entre dans la read_write_loop");
+	
 	read_write_loop(sfd, -1, writeFile);
 
 	if(isFile == -1){
