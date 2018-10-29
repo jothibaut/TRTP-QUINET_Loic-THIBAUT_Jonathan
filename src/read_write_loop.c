@@ -58,7 +58,7 @@ void free_all(){
 
 void read_write_loop(int sfd, int readFd, FILE* writeFile){
 
-	int timeOut = 7000; //Temps d'attente de poll --> [ms]
+	int timeOut = 500; //Temps d'attente de poll --> [ms]
     struct pollfd fds[2];
     int ret;
     int seqnum = 0;

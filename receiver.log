@@ -1,3 +1,9 @@
 Réception - pkt data - 0
 Envoi - pkt ack - 1
-Réception - pkt déco - 1
+Réception - pkt data - 0
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 1
+Réception - pkt data - 0
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 1
+Timed out
