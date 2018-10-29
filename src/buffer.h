@@ -6,7 +6,7 @@
 
 #define BUFFER_SIZE 528
 
-#define MAX_SEQNUM 3 //!!!!!!!! A modifier : 255 !!!!!!!!!!!!
+#define MAX_SEQNUM 255 //!!!!!!!! A modifier : 255 !!!!!!!!!!!!
 
 #define RTO 71 //[ms]
 

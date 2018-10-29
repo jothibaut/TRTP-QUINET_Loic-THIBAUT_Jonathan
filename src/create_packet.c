@@ -18,7 +18,7 @@ void create_packet_data(struct pkt *thePkt, char *payload, int seqnum, int nByte
 		return;
 	}
 
-	pkt_status_code statWin = pkt_set_window(thePkt, MAX_WINDOW_SIZE); //Fenêtre de 1 pour le moment --> A modifier pasr la suite
+	pkt_status_code statWin = pkt_set_window(thePkt, MAX_WINDOW_SIZE);
 	if(statWin != 0){
 		fprintf(stderr, "%s\n", "Erreur : pkt_set_window");
 		thePkt = NULL;
