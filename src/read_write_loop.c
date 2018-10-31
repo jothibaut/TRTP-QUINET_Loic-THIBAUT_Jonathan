@@ -58,7 +58,7 @@ void free_all(){
 
 void read_write_loop(int sfd, int readFd, FILE* writeFile){
 
-	int timeOut = 500; //Temps d'attente de poll --> [ms]
+	int timeOut = 2000; //Temps d'attente de poll --> [ms]
     struct pollfd fds[2];
     int ret;
     int seqnum = 0;
@@ -70,6 +70,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
     int receivingEmptySlot = receivingWindowSize;
     int sendingWindowSize = MAX_WINDOW_SIZE;
     int lastAckSeqnum = -1;
+    int updateSendingTimeCount = 0;
     int i;
 
     int binaryReceivingBuf[MAX_WINDOW_SIZE];
@@ -78,6 +79,9 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
     }
 
     clock_t sendingTime[MAX_WINDOW_SIZE];
+    for(i=0;i<MAX_WINDOW_SIZE;i++){
+    	sendingTime[i] = 0;
+    }
     
     bufLen = (size_t *) malloc(sizeof(size_t));
     if(bufLen == NULL){
@@ -148,7 +152,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
     		for(i=0;i<MAX_WINDOW_SIZE;i++){
     			clock_t t = clock();
     			float diff = ((float)(t - sendingTime[i]) / 1000000.0F ) * 1000;
-    			if(diff > RTO && sendingTime[i] != -1){
+    			if(diff > RTO && sendingTime[i] != 0){
     				sendingTime[i] = t;
     				*bufLen = 528;
     				char buf_data[528];
@@ -455,9 +459,10 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			    	fprintf(stderr, "%s%d\n", "Réception - pkt ack - ", thisSeqnum);
 
 			    	int index = find_pkt(thisSeqnum, sendingWindow);
+			    	//fprintf(stderr, "%s%d\n", "Index = ", index);
 			    	if(index == -1){
 			    		fprintf(stderr, "%s\n", "L'ack correspond à un seqnum qui n'est pas présent dans la sendingWindow");
-			    		if(thisSeqnum == (sendPktCount+1) % (MAX_SEQNUM+1)){
+			    		if(thisSeqnum == (sendPktCount) % (MAX_SEQNUM+1)){
 			    			fprintf(stderr, "%s\n", "Mais on peut quand meme envoyer le paquet suivant");
 				    		index = MAX_WINDOW_SIZE;
 				    	}
@@ -465,9 +470,23 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			    	while(index != 0){
 			    		sendBufCount--;
 			    		window_slide(sendingWindow);
-			    		update_binaryReceivingBuf(binaryReceivingBuf);
-			    		update_sendingTime(sendingTime);
+			    		//update_binaryReceivingBuf(binaryReceivingBuf);
+			    		sendingTime[updateSendingTimeCount%MAX_WINDOW_SIZE] = 0;
+			    		fprintf(stderr, "%s%d\n", "Setting 0 to ", updateSendingTimeCount%MAX_WINDOW_SIZE);
+			    		int j = 0;
+
+			    		fprintf(stderr, "%s", "sendingTime : ");
+			    		for(j=0;j<MAX_WINDOW_SIZE;j++){
+			    			if(sendingTime[j] == 0){
+			    				fprintf(stderr, "%s", "0");
+			    			}else{
+			    				fprintf(stderr, "%s", "1");
+			    			}
+			    		}
+			    		fprintf(stderr, "\n");
+
 			    		index--;
+			    		updateSendingTimeCount++;
 			    	}
 			    	continue;
 			    }else if(pkt_get_type(thePkt) == PTYPE_NACK){
