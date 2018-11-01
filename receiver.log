@@ -1,13 +1,13 @@
 Réception - pkt data - 0
+Index = 0
 Ecriture dans le fichier : pkt - 0
 Envoi - pkt ack - 1
-Réception - pkt data - 0
-Le paquet reçu ne figure pas dans le receivingBuf
-Envoi - pkt ack - 1
-Réception - pkt data - 0
-Le paquet reçu ne figure pas dans le receivingBuf
-Envoi - pkt ack - 1
-Réception - pkt data - 0
-Le paquet reçu ne figure pas dans le receivingBuf
-Envoi - pkt ack - 1
-Timed out
+Réception - pkt data - 1
+Index = 0
+Ecriture dans le fichier : pkt - 1
+Envoi - pkt ack - 2
+Réception - pkt data - 2
+Index = 0
+Ecriture dans le fichier : pkt - 2
+Envoi - pkt ack - 3
+Réception - pkt déco - 3

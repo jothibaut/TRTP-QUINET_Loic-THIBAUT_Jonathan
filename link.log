@@ -1,4 +1,4 @@
-@@ Using random seed: 1541062675
+@@ Using random seed: 1541067713
 @@ Using parameters:
 .. port: 1341
 .. forward_port: 2456
@@ -6,51 +6,16 @@
 .. jitter: 0
 .. err_rate: 0
 .. cut_rate: 0
-.. loss_rate: 50
-.. seed: 1541062675
+.. loss_rate: 30
+.. seed: 1541067713
 .. link_direction: Both ways
-@@ Remote host is ::1 [38240]
+@@ Remote host is ::1 [52462]
 [SEQ   0] Sent packet (Forward).
+[SEQ   1] Sent packet (Reverse).
 [SEQ   1] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   1] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   1] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   1] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Dropping packet
-[SEQ   0] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Dropping packet
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Sent packet (Forward).
-[SEQ   0] Sent packet (Forward).
+[SEQ   2] Dropping packet
+[SEQ   1] Sent packet (Forward).
+[SEQ   2] Sent packet (Forward).
+[SEQ   2] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Forward).

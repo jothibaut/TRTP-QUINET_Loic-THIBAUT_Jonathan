@@ -1,40 +1,19 @@
 Envoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
-Renvoi - pkt data - 0
+Réception - pkt ack - 1
+Setting 0 to 0
+sendingTime : 00
+Envoi - pkt data - 1
+Envoi - pkt data - 2
+On boucle pour le renvoi - 311110
+Renvoi - pkt data - 1
+Ce pkt se trouve à l'index - 1
+On boucle pour le renvoi - 311111
+Renvoi - pkt data - 2
+Ce pkt se trouve à l'index - 0
+Réception - pkt ack - 2
+Setting 0 to 1
+sendingTime : 10
+Réception - pkt ack - 3
+Setting 0 to 0
+sendingTime : 00
+Envoi - pkt déco - 3

@@ -71,6 +71,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
     int sendingWindowSize = MAX_WINDOW_SIZE;
     int lastAckSeqnum = -1;
     int updateSendingTimeCount = 0;
+    int count = 0;
     int i;
 
     int binaryReceivingBuf[MAX_WINDOW_SIZE];
@@ -150,9 +151,11 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
         	//si le RTO d'un ou pls pkt a expiré
         		//On renvoit ce(s) pkt
     		for(i=0;i<MAX_WINDOW_SIZE;i++){
+    			count++;
     			clock_t t = clock();
     			float diff = ((float)(t - sendingTime[i]) / 1000000.0F ) * 1000;
     			if(diff > RTO && sendingTime[i] != 0){
+    				fprintf(stderr, "%s%d\n", "On boucle pour le renvoi - ", count);
     				sendingTime[i] = t;
     				*bufLen = 528;
     				char buf_data[528];
@@ -168,6 +171,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 		                return;
 		            }
 		            fprintf(stderr, "%s%d\n", "Renvoi - pkt data - ", pkt_get_seqnum(sendingBuf[i]));
+		            fprintf(stderr, "%s%d\n", "Ce pkt se trouve à l'index - ", i);
     			}
     		}
 
@@ -252,7 +256,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 		                free_all();
 		                return;
 		            }
-		            fprintf(stderr, "%s%d\n", "Envoi - pkt data - ", seqnum);
+		            fprintf(stderr, "%s%d\n", "Envoi - pkt data - ", pkt_get_seqnum(thePkt));
 		            sendPktCount++;
 		            receivingAvaiableSlotCount--;
 
@@ -288,6 +292,8 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        		continue;
 	        	}else if(statDecode == E_NOMEM){
 	        		fprintf(stderr, "%s\n", "Erreur de mémoire");
+	        	}else{
+	        		fprintf(stderr, "%s\n", "Erreur inconnue dans le decode");
 	        	}
 	        }else if(pkt_get_tr(thePkt) == 1){ //Paquet tronqué
 	        	if(pkt_get_type(thePkt) == PTYPE_ACK || pkt_get_type(thePkt) == PTYPE_NACK){ //Si TR = 1 et type autre que data, on ignore
@@ -328,6 +334,7 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        		fprintf(stderr, "%s%d\n", "Réception - pkt data - ", pkt_get_seqnum(thePkt));
 
 	        		int index = find_pkt(pkt_get_seqnum(thePkt), receivingWindow);
+	        		fprintf(stderr, "%s%d\n", "Index = ", index);
 	        		if(index == -1){
 	        			//envoit paquet avec lastAck
 	        			fprintf(stderr, "%s\n", "Le paquet reçu ne figure pas dans le receivingBuf");
@@ -429,7 +436,8 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 			            fprintf(stderr, "%s%d\n", "Envoi - pkt ack - ", seqnum);
 	        		}else{
 	        			if(receivingWindowSize >1){
-	        				memcpy(receivingBuf[index], thePkt, sizeof(struct pkt));
+	        				fprintf(stderr, "%s%d%s%d\n", "Stockage du pkt - ", pkt_get_seqnum(thePkt), " a l'index - ", index);
+	        				memcpy(receivingBuf[index], thePkt, sizeof(*thePkt));
 	        				receivingEmptySlot--;
 		        			binaryReceivingBuf[index] = 1;
 
