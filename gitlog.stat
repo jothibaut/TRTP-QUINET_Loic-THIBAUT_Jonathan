@@ -1,3 +1,295 @@
+commit 2a6fe2509a86d21c1363ac490a203652dcfb6d26
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Thu Nov 1 12:31:37 2018 +0100
+
+    Résolution CRC ?
+
+ input_file            | Bin 1536 -> 1536 bytes
+ link.log              |  11 ++++++-----
+ received_file         | Bin 1536 -> 1536 bytes
+ receiver              | Bin 32096 -> 32096 bytes
+ receiver.log          |  12 +++++++++---
+ sender                | Bin 32072 -> 32072 bytes
+ sender.log            |  10 ++++++----
+ src/read_write_loop.c |  19 ++++++++++++++++++-
+ test.sh               |   1 +
+ 9 files changed, 40 insertions(+), 13 deletions(-)
+
+commit 4323688430c1c03ab8785ebb85d3f5b96e32fdee
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Thu Nov 1 12:05:48 2018 +0100
+
+    Pour tester en salle intel
+
+ 1                     | 352 ++++++++++++++------------------------------------
+ 2                     | 352 ++++++++++++++------------------------------------
+ input_file            | Bin 1536 -> 1536 bytes
+ link.log              |  57 ++------
+ received_file         | Bin 512 -> 1536 bytes
+ receiver              | Bin 32096 -> 32096 bytes
+ receiver.log          |  20 +--
+ sender                | Bin 32072 -> 32072 bytes
+ sender.log            |  57 +++-----
+ src/read_write_loop.c |  12 +-
+ test.sh               |   2 +-
+ 11 files changed, 242 insertions(+), 610 deletions(-)
+
+commit 71abb7347c299c15fdadfda82e94c281deffe24b
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Thu Nov 1 09:59:31 2018 +0100
+
+    Simple update
+
+ 1                     | 256 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2                     | 256 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ input_file            | Bin 1536 -> 1536 bytes
+ link.log              |  60 ++++++++----
+ received_file         | Bin 1536 -> 512 bytes
+ receiver              | Bin 0 -> 32096 bytes
+ receiver.log          |  17 ++--
+ sender                | Bin 0 -> 32072 bytes
+ sender.log            |  56 +++++++----
+ src/buffer.h          |   2 +-
+ src/read_write_loop.c |   9 +-
+ 11 files changed, 606 insertions(+), 50 deletions(-)
+
+commit 312664d21d9a6259e167007e2495c974c75c5f05
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Wed Oct 31 23:46:25 2018 +0100
+
+    Résolution de bug : SendingTime
+    
+    Bug restant dans l'affichage des paquets
+
+ input_file             | Bin 512 -> 1536 bytes
+ link.log               | 352 +++----------------------------------------------
+ received_file          | Bin 512 -> 1536 bytes
+ receiver.log           |  15 ++-
+ sender.log             | 350 +++---------------------------------------------
+ src/buffer.c           |   2 +
+ src/buffer.h           |   4 +-
+ src/packet_interface.h |   2 +-
+ src/read_write_loop.c  |  29 +++-
+ test.sh                |   4 +-
+ 10 files changed, 76 insertions(+), 682 deletions(-)
+
+commit 3f35b63e356002d596a230e316e3a2e214f92e01
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Tue Oct 30 00:55:03 2018 +0100
+
+    Résolution problème - perte paquet déconnexion
+
+ input_file            | Bin 512 -> 512 bytes
+ link.log              | 345 +++++++++++++++++++++++++++++++++++++++++++++++++-
+ received_file         | Bin 512 -> 512 bytes
+ receiver              | Bin 32096 -> 0 bytes
+ receiver.log          |   8 +-
+ sender                | Bin 32072 -> 0 bytes
+ sender.log            | 333 ++++++++++++++++++++++++++++++++++++++++++++++++
+ src/read_write_loop.c |   2 +-
+ test.sh               |   2 +-
+ 9 files changed, 682 insertions(+), 8 deletions(-)
+
+commit ff414791d820808d06a0451236479ef8aaeaa253
+Author: loicq256 <loicq256@gmail.com>
+Date:   Mon Oct 29 17:38:44 2018 +0100
+
+    modif nbre seq et window
+
+ read2.dat              |  42 +++++++++++++++++++++++++++++++++++++++++-
+ receiver               | Bin 0 -> 32096 bytes
+ sender                 | Bin 0 -> 32072 bytes
+ src/buffer.h           |   4 ++--
+ src/create_packet.c    |   2 +-
+ src/packet_interface.h |   4 ++--
+ 6 files changed, 46 insertions(+), 6 deletions(-)
+
+commit b6bd0d1db9b182f5bcee00f31d6ee215417f0689
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Sun Oct 28 19:21:17 2018 +0100
+
+    Résolution partielle de bug
+    
+    A débuger mnt : 1 seul paquet envoyé, si 90% de perte, malgré que le paquet data 0 arrive, rien n'est écrit dans le fichier produit par le receiver
+
+ input_file            | Bin 20480 -> 512 bytes
+ link.log              |  84 ++-----------------------------------------
+ received_file         | Bin 20480 -> 512 bytes
+ receiver.log          |   3 ++
+ sender.log            |   3 ++
+ src/read_write_loop.c |  97 ++++++++++++++++++++++++++++++--------------------
+ src/receiver.c        |   1 -
+ test.sh               |   2 +-
+ 8 files changed, 69 insertions(+), 121 deletions(-)
+
+commit d1fababafb0d3499338fbac9fb4ee6c26839fce4
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Sun Oct 28 15:52:25 2018 +0100
+
+    Deconnexion : résolution de bug
+    
+    Maintenant le sender envoit le paquet de déconnexion uniquement lorsqu'il a reçu l'acquittement du dernier paquet envoyé
+
+ input_file            | Bin 512 -> 20480 bytes
+ link.log              |  84 +++++++++++++++++++++++++++++--
+ received_file         | Bin 512 -> 20480 bytes
+ src/read_write_loop.c | 133 ++++++++++++++++++++++++++------------------------
+ test.sh               |   2 +-
+ 5 files changed, 152 insertions(+), 67 deletions(-)
+
+commit 076a76f6f8cb88dcb1173c00938bbd460843e400
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Sun Oct 28 14:19:04 2018 +0100
+
+    Ajout des fenêtres dynamiques
+
+ input_file             | Bin 512 -> 512 bytes
+ link.log               |  15 ++++----
+ received_file          | Bin 0 -> 512 bytes
+ receiver               | Bin 32168 -> 0 bytes
+ receiver.log           |   1 -
+ sender                 | Bin 32136 -> 0 bytes
+ sender.log             |   5 ---
+ src/buffer.c           |  18 ++++-----
+ src/buffer.h           |   2 -
+ src/create_packet.c    |   9 ++---
+ src/create_packet.h    |   4 +-
+ src/packet_interface.h |   2 +-
+ src/read_write_loop.c  |  97 ++++++++++++++++++-------------------------------
+ src/receiver.c         |   2 +-
+ test.sh                |   3 +-
+ write_interop.dat      |   0
+ write_interop2.dat     |   0
+ 17 files changed, 62 insertions(+), 96 deletions(-)
+
+commit 84218cab41a18ca1090171899293fa4f43d69f74
+Author: loicq256 <loicq256@gmail.com>
+Date:   Sun Oct 28 13:11:03 2018 +0100
+
+    plus de fuite de mémoire
+
+ receiver            | Bin 0 -> 32168 bytes
+ sender              | Bin 0 -> 32136 bytes
+ src/packet_implem.c |   4 +++-
+ 3 files changed, 3 insertions(+), 1 deletion(-)
+
+commit bc40d5841c50bb65814f488350e36f2fdebcc377
+Author: loicq256 <loicq256@gmail.com>
+Date:   Sun Oct 28 13:01:53 2018 +0100
+
+    rajout de free
+
+ src/read_write_loop.c | 3 +++
+ src/real_address.c    | 3 ++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+commit f0876072989ddefe1eb1bb75daf1effb368629b7
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Sun Oct 28 02:55:31 2018 +0200
+
+    Seqnum ack = pkt  à recevoir
+
+ src/read_write_loop.c | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
+
+commit 0a36b0840a6838fa1bb40a4d8314c308712767f0
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Sun Oct 28 02:13:30 2018 +0200
+
+    Déconnexion fonctionnelle
+
+ receiver              | Bin 32168 -> 0 bytes
+ sender                | Bin 32136 -> 0 bytes
+ src/read_write_loop.c |  20 +++++++++++---------
+ 3 files changed, 11 insertions(+), 9 deletions(-)
+
+commit ec751058a2347ec8cf5e08e2c994021408e07579
+Author: loicq256 <loicq256@gmail.com>
+Date:   Sat Oct 27 18:23:02 2018 +0200
+
+    deconnection avancée
+
+ receiver              | Bin 0 -> 32168 bytes
+ sender                | Bin 0 -> 32136 bytes
+ src/read_write_loop.c |   7 ++++++-
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+
+commit 1efd590e0f26bfd13ea8720e5158c0407203f77a
+Author: loicq256 <loicq256@gmail.com>
+Date:   Sat Oct 27 18:00:29 2018 +0200
+
+    deconnection pas encore au point
+
+ src/read_write_loop.c | 36 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 34 insertions(+), 2 deletions(-)
+
+commit 376ed6db529a2bcb685a8ce8dfe194fc466c97c8
+Author: loicq256 <loicq256@gmail.com>
+Date:   Fri Oct 26 17:34:32 2018 +0200
+
+    deconnexion implementé légère adaptation a faire
+
+ receiver              | Bin 28000 -> 0 bytes
+ sender                | Bin 27976 -> 0 bytes
+ src/create_packet.c   |  68 +++++++++++++++++++++++++++++++++++++++++++++++++-
+ src/create_packet.h   |   4 ++-
+ src/read_write_loop.c |  31 ++++++++++++++++++++++-
+ 5 files changed, 100 insertions(+), 3 deletions(-)
+
+commit a67cac7f5283bec4010e552964485f7b7eac2730
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Fri Oct 26 13:11:38 2018 +0200
+
+    Ajout des test.sh
+
+ .gitignore                           |   3 +
+ LICENSE                              |  22 ++
+ LINGI1341-linksim-master/.gitignore  |   3 +
+ LINGI1341-linksim-master/LICENSE     |  22 ++
+ LINGI1341-linksim-master/Makefile    |  35 +++
+ LINGI1341-linksim-master/README.md   |  26 ++
+ LINGI1341-linksim-master/link_sim.c  | 593 +++++++++++++++++++++++++++++++++++
+ LINGI1341-linksim-master/min_queue.c | 170 ++++++++++
+ LINGI1341-linksim-master/min_queue.h |  66 ++++
+ README.md                            |  26 ++
+ input_file                           | Bin 0 -> 512 bytes
+ link.log                             |  16 +
+ link_sim.c                           | 593 +++++++++++++++++++++++++++++++++++
+ min_queue.c                          | 170 ++++++++++
+ min_queue.h                          |  66 ++++
+ read.dat                             |   1 +
+ received_file                        |   0
+ receiver                             | Bin 0 -> 28000 bytes
+ receiver.log                         |   1 +
+ receiver_gennartan                   | Bin 0 -> 42760 bytes
+ salut                                |   3 +
+ sender                               | Bin 0 -> 27976 bytes
+ sender.log                           |   5 +
+ sender_gennartan                     | Bin 0 -> 45120 bytes
+ src/buffer.c                         |   4 +-
+ src/packet_implem.c                  |   3 +
+ src/read_write_loop.c                |  90 ++++--
+ test.sh                              |  58 ++++
+ write_interop.dat                    |   0
+ write_interop2.dat                   |   0
+ 30 files changed, 1948 insertions(+), 28 deletions(-)
+
+commit 38ea869905529eeca922f1394c93ecf51d344f00
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Mon Oct 22 00:59:13 2018 +0200
+
+    Soumission 1 - INGINIOUS
+
+ Makefile      |  51 +++++---
+ Makefile-Loic |  22 ++++
+ gitlog.stat   | 413 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ rapport.pdf   | Bin 0 -> 180278 bytes
+ read2.dat     |   7 +
+ src/sender.c  |   1 +
+ src/sender.h  |   1 +
+ write.dat     |   7 +
+ 8 files changed, 485 insertions(+), 17 deletions(-)
+
 commit f785a92de8d516231c6aad55e913efd9f7c85239
 Author: Jonathan Thibaut <thibautjonathan@outlook.com>
 Date:   Sun Oct 21 20:34:33 2018 +0200

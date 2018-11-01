@@ -78,3 +78,14 @@ void update_binaryReceivingBuf(int buf[]){
 	}
 	buf[MAX_WINDOW_SIZE-1] = 0;
 }
+
+void update_receivingBuf(struct pkt** buf){
+	if(buf[0] != NULL){
+		pkt_del(buf[0]);
+	}
+	int i;
+	for(i=0;i<MAX_WINDOW_SIZE-1;i++){
+		buf[i] = buf[i+1];
+	}
+	buf[MAX_WINDOW_SIZE-1] = NULL;
+}

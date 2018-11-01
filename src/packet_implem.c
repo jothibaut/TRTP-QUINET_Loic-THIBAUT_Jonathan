@@ -317,10 +317,11 @@ pkt_status_code pkt_set_payload(pkt_t *pkt,
     if(sizeof(data)>512){
         return E_NOMEM;
     }
-    
+    /*
 	if(pkt->payload!=NULL){
 		free(pkt->payload);
 	}
+    */
     pkt->payload=(char*)malloc(length*sizeof(char));
     if(pkt->payload==NULL){
         return E_NOMEM;
