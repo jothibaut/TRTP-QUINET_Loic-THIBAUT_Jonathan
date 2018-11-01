@@ -8,7 +8,7 @@
 
 #define MAX_SEQNUM 3 //!!!!!!!! A modifier : 255 !!!!!!!!!!!!
 
-#define RTO 71 //[ms]
+#define RTO 200 //[ms]
 
 int create_storage_buffer(struct pkt **);
 

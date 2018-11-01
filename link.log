@@ -1,4 +1,4 @@
-@@ Using random seed: 1541024024
+@@ Using random seed: 1541062675
 @@ Using parameters:
 .. port: 1341
 .. forward_port: 2456
@@ -7,24 +7,50 @@
 .. err_rate: 0
 .. cut_rate: 0
 .. loss_rate: 50
-.. seed: 1541024024
+.. seed: 1541062675
 .. link_direction: Both ways
-@@ Remote host is ::1 [38319]
+@@ Remote host is ::1 [38240]
+[SEQ   0] Sent packet (Forward).
+[SEQ   1] Dropping packet
+[SEQ   0] Sent packet (Forward).
+[SEQ   1] Dropping packet
+[SEQ   0] Dropping packet
+[SEQ   0] Sent packet (Forward).
+[SEQ   1] Dropping packet
+[SEQ   0] Dropping packet
+[SEQ   0] Sent packet (Forward).
+[SEQ   1] Dropping packet
+[SEQ   0] Dropping packet
+[SEQ   0] Dropping packet
+[SEQ   0] Dropping packet
+[SEQ   0] Dropping packet
+[SEQ   0] Dropping packet
+[SEQ   0] Dropping packet
 [SEQ   0] Dropping packet
 [SEQ   0] Dropping packet
 [SEQ   0] Sent packet (Forward).
-[SEQ   1] Sent packet (Reverse).
-[SEQ   1] Dropping packet
-[SEQ   2] Sent packet (Forward).
-[SEQ   1] Dropping packet
-[SEQ   1] Dropping packet
-[SEQ   2] Dropping packet
-[SEQ   1] Sent packet (Forward).
-[SEQ   2] Sent packet (Forward).
-[SEQ   3] Dropping packet
-[SEQ   3] Dropping packet
-[SEQ   1] Sent packet (Forward).
-[SEQ   2] Sent packet (Forward).
-[SEQ   3] Dropping packet
-[SEQ   3] Sent packet (Reverse).
-[SEQ   3] Dropping packet
+[SEQ   0] Dropping packet
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Dropping packet
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Dropping packet
+[SEQ   0] Dropping packet
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Dropping packet
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Dropping packet
+[SEQ   0] Dropping packet
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Dropping packet
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Dropping packet
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).

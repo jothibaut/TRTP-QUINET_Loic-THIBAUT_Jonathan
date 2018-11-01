@@ -1,22 +1,40 @@
 Envoi - pkt data - 0
 Renvoi - pkt data - 0
 Renvoi - pkt data - 0
-Réception - pkt ack - 1
-Setting 0 to 0
-sendingTime : 00
-Envoi - pkt data - 1
-Envoi - pkt data - 2
-Renvoi - pkt data - 1
-Renvoi - pkt data - 2
-Renvoi - pkt data - 1
-Renvoi - pkt data - 2
-Renvoi - pkt data - 1
-Renvoi - pkt data - 2
-Réception - pkt ack - 3
-L'ack correspond à un seqnum qui n'est pas présent dans la sendingWindow
-Mais on peut quand meme envoyer le paquet suivant
-Setting 0 to 1
-sendingTime : 10
-Setting 0 to 0
-sendingTime : 00
-Envoi - pkt déco - 3
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0
+Renvoi - pkt data - 0

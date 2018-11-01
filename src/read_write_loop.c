@@ -58,7 +58,7 @@ void free_all(){
 
 void read_write_loop(int sfd, int readFd, FILE* writeFile){
 
-	int timeOut = 2000; //Temps d'attente de poll --> [ms]
+	int timeOut = 3000; //Temps d'attente de poll --> [ms]
     struct pollfd fds[2];
     int ret;
     int seqnum = 0;
@@ -359,10 +359,11 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        		}else if(index == 0){
 
 				        if(fwrite(pkt_get_payload(thePkt), sizeof(char), pkt_get_length(thePkt), writeFile) == 0){
-		                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
+		                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur writeFile");
 		                    free_all();
 		                    return;
 		                }
+		                fprintf(stderr, "%s%d\n", "Ecriture dans le fichier : pkt - ", pkt_get_seqnum(thePkt));
 		                if(writeFile == stdout){
 		                	fflush(stdout);
 		                }
@@ -384,18 +385,20 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 
 				        int j = 1;
 				        while(binaryReceivingBuf[j] == 1 && MAX_WINDOW_SIZE > 1){ //Vider le buffer
+				        	fprintf(stderr, "%s%d\n", "Supression du pkt du receivingBuf - ", pkt_get_seqnum(receivingBuf[j]));
 				        	binaryReceivingBuf[j] = 0;
 				        	if(fwrite(pkt_get_payload(receivingBuf[j]), sizeof(char), pkt_get_length(receivingBuf[j]), writeFile) == 0){
 			                    fprintf(stderr, "%s\n", "Echec lors de l'écriture sur stdout");
 			                    free_all();
 			                    return;
 			                }
+			                fprintf(stderr, "%s%d\n", "Ecriture dans le fichier : pkt - ", pkt_get_seqnum(receivingBuf[j]));
 			                if(writeFile == stdout){
 			                	fflush(stdout);
 			                }
 					        lastAck = pkt_get_seqnum(receivingBuf[j]);
 					        window_slide(receivingWindow);
-					        update_binaryReceivingBuf(binaryReceivingBuf);
+					        //update_binaryReceivingBuf(binaryReceivingBuf);
 					        receivingEmptySlot++;
 					        j++;
 				        }
