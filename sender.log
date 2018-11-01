@@ -1,21 +1,16 @@
 Envoi - pkt data - 0
+On boucle pour le renvoi - 307757
+Renvoi - pkt data - 0
+Ce pkt se trouve à l'index - 0
 Réception - pkt ack - 1
 Setting 0 to 0
 sendingTime : 00
 Envoi - pkt data - 1
 Envoi - pkt data - 2
-Réception - pkt ack - 1
-On boucle pour le renvoi - 296842
-Renvoi - pkt data - 1
-Ce pkt se trouve à l'index - 1
-On boucle pour le renvoi - 296843
-Renvoi - pkt data - 2
-Ce pkt se trouve à l'index - 0
-Réception - pkt ack - 3
-L'ack correspond à un seqnum qui n'est pas présent dans la sendingWindow
-Mais on peut quand meme envoyer le paquet suivant
+Réception - pkt ack - 2
 Setting 0 to 1
 sendingTime : 10
+Réception - pkt ack - 3
 Setting 0 to 0
 sendingTime : 00
 Envoi - pkt déco - 3

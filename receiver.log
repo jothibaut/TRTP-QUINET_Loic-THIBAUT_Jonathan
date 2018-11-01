@@ -2,18 +2,12 @@ Réception - pkt data - 0
 Index = 0
 Ecriture dans le fichier : pkt - 0
 Envoi - pkt ack - 1
-Réception - pkt data - 2
-Index = 1
-Stockage du pkt - 2 a l'index - 1
-Envoi - pkt ack - 1
 Réception - pkt data - 1
 Index = 0
 Ecriture dans le fichier : pkt - 1
-Supression du pkt du receivingBuf - 2
-Ecriture dans le fichier : pkt - 2
-Envoi - pkt ack - 3
+Envoi - pkt ack - 2
 Réception - pkt data - 2
-Index = -1
-Le paquet reçu ne figure pas dans le receivingBuf
+Index = 0
+Ecriture dans le fichier : pkt - 2
 Envoi - pkt ack - 3
 Réception - pkt déco - 3
