@@ -289,7 +289,24 @@ void read_write_loop(int sfd, int readFd, FILE* writeFile){
 	        		//discard l'ack si on est dans le sender
 	        		//NB : par discard, on entend ne pas stocker le pkt dans le buf
 	        		fprintf(stderr, "%s\n","CRC du paquet invalide");
-	        		continue;
+	        		seqnum = (lastAck+1)%(MAX_SEQNUM+1);
+        			create_packet_ack(thePkt_ack, seqnum, receivingEmptySlot);
+
+        			char buf_ack[528];
+        			*bufLen = 528;
+		        	pkt_status_code statEncode = pkt_encode(thePkt_ack, buf_ack, bufLen);
+		            if(statEncode != 0){
+		                fprintf(stderr, "%s\n", "Echec lors de l encodage du paquet ack");
+		                free_all();
+		                return;
+		            }
+
+		            if(write(fds[1].fd, buf_ack, *bufLen) == -1){
+		                fprintf(stderr, "%s\n", "Echec lors de l ecriture sur le socket");
+		                free_all();
+		                return;
+		            }
+		            fprintf(stderr, "%s%d\n", "Envoi - pkt ack - ", seqnum);
 	        	}else if(statDecode == E_NOMEM){
 	        		fprintf(stderr, "%s\n", "Erreur de mémoire");
 	        	}else{
