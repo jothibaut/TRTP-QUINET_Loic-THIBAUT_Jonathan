@@ -7,7 +7,6 @@
 #include <stdint.h>
 #include <arpa/inet.h>
 #include "../src/packet_implem.c"
-//#include <CUnit/Cunit.h>
 
 int setup(void){
 	return 0;

@@ -2,6 +2,10 @@ Réception - pkt data - 0
 Index = 0
 Ecriture dans le fichier : pkt - 0
 Envoi - pkt ack - 1
+Réception - pkt data - 0
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 1
 Réception - pkt data - 1
 Index = 0
 Ecriture dans le fichier : pkt - 1
@@ -10,4 +14,480 @@ Réception - pkt data - 2
 Index = 0
 Ecriture dans le fichier : pkt - 2
 Envoi - pkt ack - 3
-Réception - pkt déco - 3
+Réception - pkt data - 4
+Index = 1
+Stockage du pkt - 4 a l'index - 1
+Envoi - pkt ack - 3
+Réception - pkt data - 6
+Index = 3
+Stockage du pkt - 6 a l'index - 3
+Envoi - pkt ack - 3
+Réception - pkt data - 7
+Index = 4
+Stockage du pkt - 7 a l'index - 4
+Envoi - pkt ack - 3
+Réception - pkt data - 8
+Index = 5
+Stockage du pkt - 8 a l'index - 5
+Envoi - pkt ack - 3
+Réception - pkt data - 9
+Index = 6
+Stockage du pkt - 9 a l'index - 6
+Envoi - pkt ack - 3
+Réception - pkt data - 10
+Index = 7
+Stockage du pkt - 10 a l'index - 7
+Envoi - pkt ack - 3
+Réception - pkt data - 11
+Index = 8
+Stockage du pkt - 11 a l'index - 8
+Envoi - pkt ack - 3
+Réception - pkt data - 12
+Index = 9
+Stockage du pkt - 12 a l'index - 9
+Envoi - pkt ack - 3
+Réception - pkt data - 13
+Index = 10
+Stockage du pkt - 13 a l'index - 10
+Envoi - pkt ack - 3
+Réception - pkt data - 15
+Index = 12
+Stockage du pkt - 15 a l'index - 12
+Envoi - pkt ack - 3
+Réception - pkt data - 16
+Index = 13
+Stockage du pkt - 16 a l'index - 13
+Envoi - pkt ack - 3
+Réception - pkt data - 17
+Index = 14
+Stockage du pkt - 17 a l'index - 14
+Envoi - pkt ack - 3
+Réception - pkt data - 18
+Index = 15
+Stockage du pkt - 18 a l'index - 15
+Envoi - pkt ack - 3
+Réception - pkt data - 19
+Index = 16
+Stockage du pkt - 19 a l'index - 16
+Envoi - pkt ack - 3
+Réception - pkt data - 20
+Index = 17
+Stockage du pkt - 20 a l'index - 17
+Envoi - pkt ack - 3
+Réception - pkt data - 21
+Index = 18
+Stockage du pkt - 21 a l'index - 18
+Envoi - pkt ack - 3
+Réception - pkt data - 22
+Index = 19
+Stockage du pkt - 22 a l'index - 19
+Envoi - pkt ack - 3
+Réception - pkt data - 23
+Index = 20
+Stockage du pkt - 23 a l'index - 20
+Envoi - pkt ack - 3
+Réception - pkt data - 24
+Index = 21
+Stockage du pkt - 24 a l'index - 21
+Envoi - pkt ack - 3
+Réception - pkt data - 25
+Index = 22
+Stockage du pkt - 25 a l'index - 22
+Envoi - pkt ack - 3
+Réception - pkt data - 26
+Index = 23
+Stockage du pkt - 26 a l'index - 23
+Envoi - pkt ack - 3
+Réception - pkt data - 27
+Index = 24
+Stockage du pkt - 27 a l'index - 24
+Envoi - pkt ack - 3
+Réception - pkt data - 28
+Index = 25
+Stockage du pkt - 28 a l'index - 25
+Envoi - pkt ack - 3
+Réception - pkt data - 29
+Index = 26
+Stockage du pkt - 29 a l'index - 26
+Envoi - pkt ack - 3
+Réception - pkt data - 30
+Index = 27
+Stockage du pkt - 30 a l'index - 27
+Envoi - pkt ack - 3
+Réception - pkt data - 31
+Index = 28
+Stockage du pkt - 31 a l'index - 28
+Envoi - pkt ack - 3
+Réception - pkt data - 32
+Index = 29
+Stockage du pkt - 32 a l'index - 29
+Envoi - pkt ack - 3
+Réception - pkt data - 33
+Index = 30
+Stockage du pkt - 33 a l'index - 30
+Envoi - pkt ack - 3
+Réception - pkt data - 3
+Index = 0
+Ecriture dans le fichier : pkt - 3
+Supression du pkt du receivingBuf - 4
+Ecriture dans le fichier : pkt - 4
+Envoi - pkt ack - 5
+Réception - pkt data - 4
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 5
+Réception - pkt data - 5
+Index = 0
+Ecriture dans le fichier : pkt - 5
+Supression du pkt du receivingBuf - 6
+Ecriture dans le fichier : pkt - 6
+Supression du pkt du receivingBuf - 7
+Ecriture dans le fichier : pkt - 7
+Supression du pkt du receivingBuf - 8
+Ecriture dans le fichier : pkt - 8
+Supression du pkt du receivingBuf - 9
+Ecriture dans le fichier : pkt - 9
+Supression du pkt du receivingBuf - 10
+Ecriture dans le fichier : pkt - 10
+Supression du pkt du receivingBuf - 11
+Ecriture dans le fichier : pkt - 11
+Supression du pkt du receivingBuf - 12
+Ecriture dans le fichier : pkt - 12
+Supression du pkt du receivingBuf - 13
+Ecriture dans le fichier : pkt - 13
+Envoi - pkt ack - 14
+Réception - pkt data - 6
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 14
+Réception - pkt data - 7
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 14
+Réception - pkt data - 34
+Index = 20
+Stockage du pkt - 34 a l'index - 20
+Envoi - pkt ack - 14
+Réception - pkt data - 8
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 14
+Réception - pkt data - 35
+Index = 21
+Stockage du pkt - 35 a l'index - 21
+Envoi - pkt ack - 14
+Réception - pkt data - 9
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 14
+Réception - pkt data - 11
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 14
+Réception - pkt data - 12
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 14
+Réception - pkt data - 13
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 14
+Réception - pkt data - 14
+Index = 0
+Ecriture dans le fichier : pkt - 14
+Supression du pkt du receivingBuf - 15
+Ecriture dans le fichier : pkt - 15
+Supression du pkt du receivingBuf - 16
+Ecriture dans le fichier : pkt - 16
+Supression du pkt du receivingBuf - 17
+Ecriture dans le fichier : pkt - 17
+Supression du pkt du receivingBuf - 18
+Ecriture dans le fichier : pkt - 18
+Supression du pkt du receivingBuf - 19
+Ecriture dans le fichier : pkt - 19
+Supression du pkt du receivingBuf - 20
+Ecriture dans le fichier : pkt - 20
+Supression du pkt du receivingBuf - 21
+Ecriture dans le fichier : pkt - 21
+Supression du pkt du receivingBuf - 22
+Ecriture dans le fichier : pkt - 22
+Supression du pkt du receivingBuf - 23
+Ecriture dans le fichier : pkt - 23
+Supression du pkt du receivingBuf - 24
+Ecriture dans le fichier : pkt - 24
+Supression du pkt du receivingBuf - 25
+Ecriture dans le fichier : pkt - 25
+Supression du pkt du receivingBuf - 26
+Ecriture dans le fichier : pkt - 26
+Supression du pkt du receivingBuf - 27
+Ecriture dans le fichier : pkt - 27
+Supression du pkt du receivingBuf - 28
+Ecriture dans le fichier : pkt - 28
+Supression du pkt du receivingBuf - 29
+Ecriture dans le fichier : pkt - 29
+Supression du pkt du receivingBuf - 30
+Ecriture dans le fichier : pkt - 30
+Supression du pkt du receivingBuf - 31
+Ecriture dans le fichier : pkt - 31
+Supression du pkt du receivingBuf - 32
+Ecriture dans le fichier : pkt - 32
+Supression du pkt du receivingBuf - 33
+Ecriture dans le fichier : pkt - 33
+Supression du pkt du receivingBuf - 34
+Ecriture dans le fichier : pkt - 34
+Supression du pkt du receivingBuf - 35
+Ecriture dans le fichier : pkt - 35
+Envoi - pkt ack - 36
+Réception - pkt data - 15
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 16
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 17
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 18
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 19
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 20
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 21
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 22
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 23
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 24
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 25
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 26
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 27
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 30
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 31
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 32
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 33
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 36
+Réception - pkt data - 36
+Index = 0
+Ecriture dans le fichier : pkt - 36
+Envoi - pkt ack - 37
+Réception - pkt data - 37
+Index = 0
+Ecriture dans le fichier : pkt - 37
+Envoi - pkt ack - 38
+Réception - pkt data - 38
+Index = 0
+Ecriture dans le fichier : pkt - 38
+Envoi - pkt ack - 39
+Réception - pkt data - 39
+Index = 0
+Ecriture dans le fichier : pkt - 39
+Envoi - pkt ack - 40
+Réception - pkt data - 40
+Index = 0
+Ecriture dans le fichier : pkt - 40
+Envoi - pkt ack - 41
+Réception - pkt data - 42
+Index = 1
+Stockage du pkt - 42 a l'index - 1
+Envoi - pkt ack - 41
+Réception - pkt data - 43
+Index = 2
+Stockage du pkt - 43 a l'index - 2
+Envoi - pkt ack - 41
+Réception - pkt data - 46
+Index = 5
+Stockage du pkt - 46 a l'index - 5
+Envoi - pkt ack - 41
+Réception - pkt data - 47
+Index = 6
+Stockage du pkt - 47 a l'index - 6
+Envoi - pkt ack - 41
+Réception - pkt data - 48
+Index = 7
+Stockage du pkt - 48 a l'index - 7
+Envoi - pkt ack - 41
+Réception - pkt data - 49
+Index = 8
+Stockage du pkt - 49 a l'index - 8
+Envoi - pkt ack - 41
+Réception - pkt data - 50
+Index = 9
+Stockage du pkt - 50 a l'index - 9
+Envoi - pkt ack - 41
+Réception - pkt data - 51
+Index = 10
+Stockage du pkt - 51 a l'index - 10
+Envoi - pkt ack - 41
+Réception - pkt data - 53
+Index = 12
+Stockage du pkt - 53 a l'index - 12
+Envoi - pkt ack - 41
+Réception - pkt data - 54
+Index = 13
+Stockage du pkt - 54 a l'index - 13
+Envoi - pkt ack - 41
+Réception - pkt data - 55
+Index = 14
+Stockage du pkt - 55 a l'index - 14
+Envoi - pkt ack - 41
+Réception - pkt data - 57
+Index = 16
+Stockage du pkt - 57 a l'index - 16
+Envoi - pkt ack - 41
+Réception - pkt data - 58
+Index = 17
+Stockage du pkt - 58 a l'index - 17
+Envoi - pkt ack - 41
+Réception - pkt data - 41
+Index = 0
+Ecriture dans le fichier : pkt - 41
+Supression du pkt du receivingBuf - 42
+Ecriture dans le fichier : pkt - 42
+Supression du pkt du receivingBuf - 43
+Ecriture dans le fichier : pkt - 43
+Envoi - pkt ack - 44
+Réception - pkt data - 42
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 44
+Réception - pkt data - 43
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 44
+Réception - pkt data - 44
+Index = 0
+Ecriture dans le fichier : pkt - 44
+Envoi - pkt ack - 45
+Réception - pkt data - 45
+Index = 0
+Ecriture dans le fichier : pkt - 45
+Supression du pkt du receivingBuf - 46
+Ecriture dans le fichier : pkt - 46
+Supression du pkt du receivingBuf - 47
+Ecriture dans le fichier : pkt - 47
+Supression du pkt du receivingBuf - 48
+Ecriture dans le fichier : pkt - 48
+Supression du pkt du receivingBuf - 49
+Ecriture dans le fichier : pkt - 49
+Supression du pkt du receivingBuf - 50
+Ecriture dans le fichier : pkt - 50
+Supression du pkt du receivingBuf - 51
+Ecriture dans le fichier : pkt - 51
+Envoi - pkt ack - 52
+Réception - pkt data - 46
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 52
+Réception - pkt data - 48
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 52
+Réception - pkt data - 49
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 52
+Réception - pkt data - 50
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 52
+Réception - pkt data - 51
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 52
+Réception - pkt data - 53
+Index = 1
+Stockage du pkt - 53 a l'index - 1
+Envoi - pkt ack - 52
+Réception - pkt data - 54
+Index = 2
+Stockage du pkt - 54 a l'index - 2
+Envoi - pkt ack - 52
+Réception - pkt data - 55
+Index = 3
+Stockage du pkt - 55 a l'index - 3
+Envoi - pkt ack - 52
+Réception - pkt data - 56
+Index = 4
+Stockage du pkt - 56 a l'index - 4
+Envoi - pkt ack - 52
+Réception - pkt data - 57
+Index = 5
+Stockage du pkt - 57 a l'index - 5
+Envoi - pkt ack - 52
+Réception - pkt data - 52
+Index = 0
+Ecriture dans le fichier : pkt - 52
+Supression du pkt du receivingBuf - 53
+Ecriture dans le fichier : pkt - 53
+Supression du pkt du receivingBuf - 54
+Ecriture dans le fichier : pkt - 54
+Supression du pkt du receivingBuf - 55
+Ecriture dans le fichier : pkt - 55
+Supression du pkt du receivingBuf - 56
+Ecriture dans le fichier : pkt - 56
+Supression du pkt du receivingBuf - 57
+Ecriture dans le fichier : pkt - 57
+Supression du pkt du receivingBuf - 58
+Ecriture dans le fichier : pkt - 58
+Envoi - pkt ack - 59
+Réception - pkt data - 53
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 59
+Réception - pkt data - 54
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 59
+Réception - pkt data - 55
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 59
+Réception - pkt data - 56
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 59
+Réception - pkt data - 57
+Index = -1
+Le paquet reçu ne figure pas dans le receivingBuf
+Envoi - pkt ack - 59
+Réception - pkt déco - 59

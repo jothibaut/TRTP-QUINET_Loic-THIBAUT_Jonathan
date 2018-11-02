@@ -1,3 +1,35 @@
+commit 5bf975045bc7a9a622ad23d5800c30823a60131e
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Fri Nov 2 00:25:47 2018 +0100
+
+    Soumission temporaire
+
+ gitlog.stat            | 292 +++++++++++++++++++++++++++++++++++++++++++++++++
+ rapport.pdf            | Bin 180278 -> 198419 bytes
+ receiver               | Bin 32096 -> 32088 bytes
+ sender                 | Bin 32072 -> 32056 bytes
+ src/buffer.c           |  11 ++
+ src/buffer.h           |   4 +-
+ src/create_packet.c    |  16 +--
+ src/packet_implem.c    |   3 +-
+ src/packet_interface.h |   2 +-
+ src/read_write_loop.c  |  66 ++++++++---
+ test.sh                |   4 +-
+ 11 files changed, 372 insertions(+), 26 deletions(-)
+
+commit fee370965ab22bc7498c38c7f132006a3e6a2214
+Author: Jonathan Thibaut <thibautjonathan@outlook.com>
+Date:   Thu Nov 1 13:29:16 2018 +0100
+
+    Update précédent mort
+
+ input_file    | Bin 1536 -> 1536 bytes
+ link.log      |  12 +++++-------
+ received_file | Bin 1536 -> 1536 bytes
+ receiver.log  |  12 +++---------
+ sender.log    |  15 +++++----------
+ 5 files changed, 13 insertions(+), 26 deletions(-)
+
 commit 2a6fe2509a86d21c1363ac490a203652dcfb6d26
 Author: Jonathan Thibaut <thibautjonathan@outlook.com>
 Date:   Thu Nov 1 12:31:37 2018 +0100

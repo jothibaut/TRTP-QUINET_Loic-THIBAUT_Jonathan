@@ -17,7 +17,7 @@ typedef enum {
 /* Taille maximale permise pour le payload */
 #define MAX_PAYLOAD_SIZE 512
 /* Taille maximale de Window */
-#define MAX_WINDOW_SIZE 31 //Max : (2^n)/2 = 16 --> cfr p.25 sylla
+#define MAX_WINDOW_SIZE 31
 /* Taille maximale d'un paquet */
 #define MAX_PACKET_SIZE 528
 

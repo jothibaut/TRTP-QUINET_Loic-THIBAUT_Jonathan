@@ -61,16 +61,6 @@ void window_slide(int window[]){
 	window[MAX_WINDOW_SIZE-1] = (window[MAX_WINDOW_SIZE-1] + 1) % (MAX_SEQNUM+1);
 }
 
-/*
-void update_sendingTime(clock_t sendingTime[]){
-	int i;
-	for(i=0;i<MAX_WINDOW_SIZE-1;i++){
-		sendingTime[i] = sendingTime[i+1];
-	}
-	sendingTime[MAX_WINDOW_SIZE-1] = -1;
-}
-*/
-
 void update_binaryReceivingBuf(int buf[]){
 	int i;
 	for(i=0;i<MAX_WINDOW_SIZE-1;i++){

@@ -8,7 +8,7 @@ dd if=/dev/urandom of=input_file bs=1 count=30000 &> /dev/null
 
 # On lance le simulateur de lien avec 10% de pertes et un délais de 50ms
 # -p port -P forward port -l loss_rate [%] -d delay
-./link_sim -p 1341 -P 2456 -l 10 -d 20 -R -c 10 -e 10 -j 0 &> link.log &
+./link_sim -p 1341 -P 2456 -l 10 -d 0 -R -c 0 -e 0 -j 0 &> link.log &
 #./link_sim -p 64342 -P 64341 -l 10 -c 10 -j 10 -d 10  &> link.log &
 link_pid=$!
 

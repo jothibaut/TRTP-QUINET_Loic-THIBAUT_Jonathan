@@ -1,4 +1,4 @@
-@@ Using random seed: 1541075332
+@@ Using random seed: 1541122763
 @@ Using parameters:
 .. port: 1341
 .. forward_port: 2456
@@ -6,15 +6,225 @@
 .. jitter: 0
 .. err_rate: 0
 .. cut_rate: 0
-.. loss_rate: 30
-.. seed: 1541075332
+.. loss_rate: 10
+.. seed: 1541122763
 .. link_direction: Both ways
-@@ Remote host is ::1 [48291]
-[SEQ   0] Dropping packet
+@@ Remote host is ::1 [53153]
+[SEQ   0] Sent packet (Forward).
+[SEQ   0] Sent packet (Forward).
+[SEQ   1] Dropping packet
 [SEQ   0] Sent packet (Forward).
 [SEQ   1] Sent packet (Reverse).
 [SEQ   1] Sent packet (Forward).
 [SEQ   2] Sent packet (Forward).
 [SEQ   2] Sent packet (Reverse).
+[SEQ   3] Dropping packet
 [SEQ   3] Sent packet (Reverse).
+[SEQ   4] Sent packet (Forward).
+[SEQ   5] Dropping packet
+[SEQ   6] Sent packet (Forward).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   7] Sent packet (Forward).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   8] Sent packet (Forward).
+[SEQ   9] Sent packet (Forward).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ  10] Sent packet (Forward).
+[SEQ   3] Sent packet (Reverse).
+[SEQ  11] Sent packet (Forward).
+[SEQ   3] Sent packet (Reverse).
+[SEQ  12] Sent packet (Forward).
+[SEQ  13] Sent packet (Forward).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ  14] Dropping packet
+[SEQ  15] Sent packet (Forward).
+[SEQ  16] Sent packet (Forward).
+[SEQ  17] Sent packet (Forward).
+[SEQ  18] Sent packet (Forward).
+[SEQ  19] Sent packet (Forward).
+[SEQ  20] Sent packet (Forward).
+[SEQ  21] Sent packet (Forward).
+[SEQ  22] Sent packet (Forward).
+[SEQ  23] Sent packet (Forward).
+[SEQ  24] Sent packet (Forward).
+[SEQ  25] Sent packet (Forward).
+[SEQ  26] Sent packet (Forward).
+[SEQ  27] Sent packet (Forward).
+[SEQ  28] Sent packet (Forward).
+[SEQ  29] Sent packet (Forward).
+[SEQ  30] Sent packet (Forward).
+[SEQ  31] Sent packet (Forward).
+[SEQ  32] Sent packet (Forward).
+[SEQ  33] Sent packet (Forward).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Sent packet (Reverse).
+[SEQ   3] Dropping packet
 [SEQ   3] Sent packet (Forward).
+[SEQ   5] Sent packet (Reverse).
+[SEQ   4] Sent packet (Forward).
+[SEQ   5] Sent packet (Forward).
+[SEQ   6] Sent packet (Forward).
+[SEQ   5] Dropping packet
+[SEQ   7] Sent packet (Forward).
+[SEQ  34] Sent packet (Forward).
+[SEQ   8] Sent packet (Forward).
+[SEQ  14] Sent packet (Reverse).
+[SEQ  35] Sent packet (Forward).
+[SEQ  14] Dropping packet
+[SEQ   9] Sent packet (Forward).
+[SEQ  10] Dropping packet
+[SEQ  14] Sent packet (Reverse).
+[SEQ  14] Sent packet (Reverse).
+[SEQ  11] Sent packet (Forward).
+[SEQ  12] Sent packet (Forward).
+[SEQ  13] Sent packet (Forward).
+[SEQ  14] Sent packet (Forward).
+[SEQ  15] Sent packet (Forward).
+[SEQ  16] Sent packet (Forward).
+[SEQ  17] Sent packet (Forward).
+[SEQ  18] Sent packet (Forward).
+[SEQ  19] Sent packet (Forward).
+[SEQ  20] Sent packet (Forward).
+[SEQ  21] Sent packet (Forward).
+[SEQ  22] Sent packet (Forward).
+[SEQ  23] Sent packet (Forward).
+[SEQ  24] Sent packet (Forward).
+[SEQ  25] Sent packet (Forward).
+[SEQ  26] Sent packet (Forward).
+[SEQ  27] Sent packet (Forward).
+[SEQ  28] Dropping packet
+[SEQ  29] Dropping packet
+[SEQ  30] Sent packet (Forward).
+[SEQ  31] Sent packet (Forward).
+[SEQ  32] Sent packet (Forward).
+[SEQ  33] Sent packet (Forward).
+[SEQ  14] Sent packet (Reverse).
+[SEQ  14] Sent packet (Reverse).
+[SEQ  36] Sent packet (Forward).
+[SEQ  14] Sent packet (Reverse).
+[SEQ  37] Sent packet (Forward).
+[SEQ  14] Sent packet (Reverse).
+[SEQ  14] Sent packet (Reverse).
+[SEQ  38] Sent packet (Forward).
+[SEQ  14] Sent packet (Reverse).
+[SEQ  39] Sent packet (Forward).
+[SEQ  40] Sent packet (Forward).
+[SEQ  41] Dropping packet
+[SEQ  42] Sent packet (Forward).
+[SEQ  43] Sent packet (Forward).
+[SEQ  44] Dropping packet
+[SEQ  36] Dropping packet
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  45] Dropping packet
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  46] Sent packet (Forward).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Dropping packet
+[SEQ  47] Sent packet (Forward).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  48] Sent packet (Forward).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  36] Dropping packet
+[SEQ  49] Sent packet (Forward).
+[SEQ  36] Sent packet (Reverse).
+[SEQ  37] Sent packet (Reverse).
+[SEQ  50] Sent packet (Forward).
+[SEQ  38] Sent packet (Reverse).
+[SEQ  51] Sent packet (Forward).
+[SEQ  39] Sent packet (Reverse).
+[SEQ  40] Sent packet (Reverse).
+[SEQ  52] Dropping packet
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  53] Sent packet (Forward).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  54] Sent packet (Forward).
+[SEQ  55] Sent packet (Forward).
+[SEQ  56] Dropping packet
+[SEQ  57] Sent packet (Forward).
+[SEQ  58] Sent packet (Forward).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Reverse).
+[SEQ  41] Sent packet (Forward).
+[SEQ  44] Sent packet (Reverse).
+[SEQ  42] Sent packet (Forward).
+[SEQ  43] Sent packet (Forward).
+[SEQ  44] Sent packet (Reverse).
+[SEQ  44] Sent packet (Reverse).
+[SEQ  44] Sent packet (Forward).
+[SEQ  45] Sent packet (Reverse).
+[SEQ  45] Sent packet (Forward).
+[SEQ  46] Sent packet (Forward).
+[SEQ  47] Dropping packet
+[SEQ  52] Sent packet (Reverse).
+[SEQ  48] Sent packet (Forward).
+[SEQ  52] Dropping packet
+[SEQ  49] Sent packet (Forward).
+[SEQ  50] Sent packet (Forward).
+[SEQ  51] Sent packet (Forward).
+[SEQ  52] Dropping packet
+[SEQ  53] Sent packet (Forward).
+[SEQ  54] Sent packet (Forward).
+[SEQ  55] Sent packet (Forward).
+[SEQ  56] Sent packet (Forward).
+[SEQ  57] Sent packet (Forward).
+[SEQ  58] Dropping packet
+[SEQ  52] Sent packet (Reverse).
+[SEQ  52] Sent packet (Reverse).
+[SEQ  52] Dropping packet
+[SEQ  52] Sent packet (Reverse).
+[SEQ  52] Sent packet (Reverse).
+[SEQ  52] Dropping packet
+[SEQ  52] Dropping packet
+[SEQ  52] Sent packet (Reverse).
+[SEQ  52] Dropping packet
+[SEQ  52] Sent packet (Forward).
+[SEQ  53] Sent packet (Forward).
+[SEQ  59] Sent packet (Reverse).
+[SEQ  54] Sent packet (Forward).
+[SEQ  55] Sent packet (Forward).
+[SEQ  59] Sent packet (Reverse).
+[SEQ  56] Sent packet (Forward).
+[SEQ  57] Sent packet (Forward).
+[SEQ  59] Sent packet (Reverse).
+[SEQ  59] Sent packet (Reverse).
+[SEQ  59] Sent packet (Reverse).
+[SEQ  59] Sent packet (Reverse).
+[SEQ  59] Sent packet (Forward).
